@@ -4,13 +4,19 @@
 #   - Local run: OK
 #   - Remote run: untested
 
-from flask import Flask, request, redirect
+from flask import Flask, request, redirect, send_file
 import os
 
-from azure.storage.blob import BlobServiceClient
+from azure.storage.blob import BlobServiceClient, BlobClient
 import time
 
 import shutil
+
+import io
+from io import BytesIO
+
+# from <helper> import <helper_method>
+
 
 app = Flask(__name__)
 
@@ -20,11 +26,18 @@ if not os.path.exists(UPLOAD_FOLDER):
     os.makedirs(UPLOAD_FOLDER)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
+
 @app.route('/')
 def index():
     return '''
     <html>
         <body>
+            <h2>Download Photo</h2>
+            <img src="https://capstonestorage123.blob.core.windows.net/mycontainer/uploaded_photo1728964649459844428.png"/>
+            <form action="/download" method="get">
+                <button type="submit">Download Photo</button>
+            </form>
+
             <h2>Submit a Photo</h2>
             <form action="/upload" method="POST" enctype="multipart/form-data">
                 <label for="file">Choose a photo:</label>
@@ -66,7 +79,28 @@ def upload_file():
 
         return f"Photo uploaded successfully: {file.filename}"
 
-    
+@app.route('/download', methods=['GET'])
+def download_file():
+
+    # Connection string to Azure Blob Storage
+    connection_string = "DefaultEndpointsProtocol=https;AccountName=capstonestorage123;AccountKey=hcpBIufXBfBnGOxPZJlP7TrySHWBvOY8JvdCQLWjh1kUHQHK38HVNCqnU87JeMO0aQrN6zCLZR5n+AStX2g46g==;EndpointSuffix=core.windows.net"
+
+    # Create the BlobServiceClient object
+    blob_service_client = BlobServiceClient.from_connection_string(connection_string)
+
+    # Specify container and blob (file) name
+    container_name = "mycontainer"
+    blob_name = "uploaded_photo1728964649459844428.png"
+
+    # Get BlobClient
+    blob_client = blob_service_client.get_blob_client(container=container_name, blob=blob_name)
+
+    # Download the blob to a local file
+    with open("downloaded_example_photo.png", "wb") as download_file:
+        download_file.write(blob_client.download_blob().readall())
+
+    return f"Photo downloaded successfully!"
+
 if __name__ == '__main__':
     app.run(debug=True)
 
