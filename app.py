@@ -96,10 +96,17 @@ def download_file():
     blob_client = blob_service_client.get_blob_client(container=container_name, blob=blob_name)
 
     # Download the blob to a local file
-    with open("downloaded_example_photo.png", "wb") as download_file:
-        download_file.write(blob_client.download_blob().readall())
+    # with open("downloaded_example_photo.png", "wb") as download_file:
+    #     download_file.write(blob_client.download_blob().readall())
+    #
+    #return f"Photo downloaded successfully!"
 
-    return f"Photo downloaded successfully!"
+    # Download the blob to memory (as a BytesIO object)
+    blob_data = blob_client.download_blob().readall()
+    download_stream = io.BytesIO(blob_data)
+
+    # Send the file to the user as an attachment
+    return send_file(download_stream, as_attachment=True, download_name="downloaded_example_photo.png", mimetype='image/png')
 
 if __name__ == '__main__':
     app.run(debug=True)
