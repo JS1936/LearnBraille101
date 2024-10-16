@@ -80,7 +80,7 @@ def upload_file():
             blob_client.upload_blob(data)
 
         # Try to get most recent submission 
-        #image = get_most_recent_blob_photo()
+        image = get_most_recent_blob_photo()
 
         return f"Photo uploaded successfully: {file.filename}"
 
