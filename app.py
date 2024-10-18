@@ -29,8 +29,8 @@ if not os.path.exists(UPLOAD_FOLDER):
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 
-cellsToEnglishText_using_abcbraille() # temporary
-exit(1) # temporary
+#cellsToEnglishText_using_abcbraille() # temporary
+#exit(1) # temporary
 
 
 @app.route('/')
