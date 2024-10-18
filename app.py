@@ -18,7 +18,7 @@ from io import BytesIO
 from PIL import Image
 
 # from <helper> import <helper_method>
-
+#from cellsToText import cellsToEnglishText_using_abcbraille
 
 app = Flask(__name__)
 
@@ -27,6 +27,10 @@ UPLOAD_FOLDER = 'uploads/'
 if not os.path.exists(UPLOAD_FOLDER):
     os.makedirs(UPLOAD_FOLDER)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+
+#cellsToEnglishText_using_abcbraille() # temporary
+#exit(1) # temporary
 
 
 @app.route('/')
