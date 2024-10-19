@@ -18,7 +18,6 @@ from io import BytesIO
 from PIL import Image
 
 # from <helper> import <helper_method>
-#from cellsToText import cellsToEnglishText_using_abcbraille
 
 app = Flask(__name__)
 
@@ -29,8 +28,6 @@ if not os.path.exists(UPLOAD_FOLDER):
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 
-#cellsToEnglishText_using_abcbraille() # temporary
-#exit(1) # temporary
 
 
 @app.route('/')
@@ -38,18 +35,20 @@ def index():
     return '''
     <html>
         <body>
-            <h2>Download Photo</h2>
-            <img src="https://capstonestorage123.blob.core.windows.net/mycontainer/uploaded_photo1728964649459844428.png"/>
-            <form action="/download" method="get">
-                <button type="submit">Download Photo</button>
-            </form>
+		<h1> New Message to User: Hello </h1>
+		<h2>Download Example Photo</h2>
+		<p> HELLO</p>
+		<img src="https://capstonestorage123.blob.core.windows.net/mycontainer/uploaded_photo1728964649459844428.png"/>
+		<form action="/download" method="get">
+    			<button type="submit">Download Photo</button>
+		</form>
 
-            <h2>Submit a Photo</h2>
-            <form action="/upload" method="POST" enctype="multipart/form-data">
-                <label for="file">Choose a photo:</label>
-                <input type="file" id="file" name="file" accept="image/*">
-                <input type="submit" value="Upload Photo">
-            </form>
+		<h2>Submit a Photo</h2>
+		<form action="/upload" method="POST" enctype="multipart/form-data">
+ 			 <label for="file">Choose a photo:</label>
+  			 <input type="file" id="file" name="file" accept="image/*">
+  			<input type="submit" value="Upload Photo">
+		</form>            
         </body>
     </html>
     '''
