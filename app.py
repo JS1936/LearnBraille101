@@ -4,7 +4,7 @@
 #   - Local run: OK
 #   - Remote run: untested
 
-from flask import Flask, request, redirect, send_file
+from flask import Flask, request, redirect, send_file, render_template, send_from_directory
 import os
 
 from azure.storage.blob import BlobServiceClient, BlobClient
@@ -32,6 +32,29 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 @app.route('/')
 def index():
+    return send_from_directory('static', 'index.html') 
+    # return '''
+    # <html>
+    #     <body>
+	# 	<h1> New Message to User: Hello </h1>
+	# 	<h2>Download Example Photo</h2>
+	# 	<p> HELLO</p>
+	# 	<img src="https://capstonestorage123.blob.core.windows.net/mycontainer/uploaded_photo1728964649459844428.png"/>
+	# 	<form action="/download" method="get">
+    # 			<button type="submit">Download Photo</button>
+	# 	</form>
+
+	# 	<h2>Submit a Photo</h2>
+	# 	<form action="/upload" method="POST" enctype="multipart/form-data">
+ 	# 		 <label for="file">Choose a photo:</label>
+  	# 		 <input type="file" id="file" name="file" accept="image/*">
+  	# 		<input type="submit" value="Upload Photo">
+	# 	</form>            
+    #     </body>
+    # </html>
+    # '''
+@app.route('/photo')
+def photo():
     return '''
     <html>
         <body>
@@ -52,6 +75,26 @@ def index():
         </body>
     </html>
     '''
+    #return render_template('photo.html')
+
+@app.route('/About.html')
+def about():
+    return send_from_directory('static', 'About.html') 
+
+
+@app.route('/x')
+def x():
+    return send_from_directory('static', 'x.html') 
+
+@app.route('/y')
+def y():
+    return send_from_directory('static', 'y.html') 
+
+@app.route('/z')
+def z():
+    return send_from_directory('static', 'z.html') 
+
+
 
 @app.route('/upload', methods=['POST'])
 def upload_file():
