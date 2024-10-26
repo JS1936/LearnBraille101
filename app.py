@@ -95,7 +95,11 @@ def learnmore():
 
 @app.route('/Design_and_Implementation.html')
 def design():
-    return send_from_directory('static', 'Design_and_Implementation.html')  
+    return send_from_directory('static', 'Design_and_Implementation.html') 
+
+@app.route('/Presentation.html')
+def presentation():
+    return send_from_directory('static', 'Presentation.html')   
 
 @app.route('/x')
 def x():
