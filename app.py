@@ -67,10 +67,6 @@
 	
 		<br>
 
-		<!--<button class="custom-button" onclick="window.location.href='Code.html'">
-       			Code
-    		</button>-->
-
 		<button class="custom-button" onclick="window.location.href='Convert.html'">
        			Convert
     		</button>
@@ -80,7 +76,7 @@
     		</button>
 
 		<button class="custom-button" onclick="window.location.href='Presentation.html'">
-				Presentation
+			Presentation
 		 </button>
 
 		
