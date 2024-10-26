@@ -81,6 +81,13 @@ def photo():
 def about():
     return send_from_directory('static', 'About.html') 
 
+@app.route('/Code.html')
+def code():
+    return send_from_directory('static', 'Code.html') 
+
+@app.route('/LearnBraille.html')
+def learnbraille():
+    return send_from_directory('static', 'LearnBraille.html') 
 
 @app.route('/x')
 def x():
