@@ -89,6 +89,14 @@ def code():
 def learnbraille():
     return send_from_directory('static', 'LearnBraille.html') 
 
+@app.route('/LearnMore.html')
+def learnmore():
+    return send_from_directory('static', 'LearnMore.html')
+
+@app.route('/Design_and_Implementation.html')
+def design():
+    return send_from_directory('static', 'Design_and_Implementation.html')  
+
 @app.route('/x')
 def x():
     return send_from_directory('static', 'x.html') 
