@@ -173,8 +173,8 @@ def upload_file():
         result = subprocess.run(['python', 'py/hello_world.py', cells_json], capture_output=True, text=True)
         
         print("result output: " + result.stdout)
-
-        return f"Photo uploaded successfully: {file.filename}"
+        return f"Result from subprocess: {result.stdout}"
+        # return f"Photo uploaded successfully: {file.filename}"
         
 
 @app.route('/download', methods=['GET'])
