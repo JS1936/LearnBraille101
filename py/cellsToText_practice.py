@@ -57,7 +57,7 @@ def cellsToText(cells):
         #print("TEXT = " + str(textbox.text))
 
         #print("OK_2")
-        #time.sleep(10)
+        time.sleep(10)
 
     except:
         print("FAILED")
