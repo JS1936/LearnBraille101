@@ -207,7 +207,8 @@ def download_file():
     return send_file(download_stream, as_attachment=True, download_name="downloaded_example_photo.png", mimetype='image/png')
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True)    # remote
+    #app.run('0.0.0.0', 8080) 
 
 
 def get_most_recent_blob_photo():

@@ -23,14 +23,14 @@ import requests
 #def open_abcbraille(driver):
 
 def cellsToText(cells):
-    print("Hi")
+    #print("cellsToText. ")
     output_text = ""
     # Set up the WebDriver (this example uses Chrome)
     driver = webdriver.Chrome()
     try:
         driver.get("https://abcbraille.com/braille")  # Open the website
         time.sleep(2) # Let the page load
-        print("OK_1")
+        #print("OK_1")
 
         # Send each cell into textbox to get translated
         for cell in cells:
@@ -54,10 +54,10 @@ def cellsToText(cells):
         # Store results. The id of result/output textbox is "translate_output"
         textbox = driver.find_element(By.ID, "translate_output")
         output_text = textbox.text
-        print("TEXT = " + str(textbox.text))
+        #print("TEXT = " + str(textbox.text))
 
-        print("OK_2")
-        time.sleep(10)
+        #print("OK_2")
+        #time.sleep(10)
 
     except:
         print("FAILED")
@@ -84,6 +84,7 @@ def cellsToText(cells):
 
     # Saving the data into the HTML file
     output_file.close()
+    #print("output_text (in cellsToText) = " + str(output_text))
 
     # Return output so that it can later be displayed to user
     return output_text
