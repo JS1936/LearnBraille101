@@ -3,7 +3,8 @@
 # Status: 
 #   - Local run: OK
 #   - Remote run: untested
-#
+import subprocess # for calling/running hello world
+import json # for passing in a list of cells to hello world
 
 from flask import Flask, request, redirect, send_file, render_template, send_from_directory
 import os
@@ -59,9 +60,8 @@ def photo():
     return '''
     <html>
         <body>
-		<h1> New Message to User: Hello </h1>
+		<h1>Convert UEB to English Digital Text</h1>
 		<h2>Download Example Photo</h2>
-		<p> HELLO</p>
 		<img src="https://capstonestorage123.blob.core.windows.net/mycontainer/uploaded_photo1728964649459844428.png"/>
 		<form action="/download" method="get">
     			<button type="submit">Download Photo</button>
@@ -73,6 +73,8 @@ def photo():
   			 <input type="file" id="file" name="file" accept="image/*">
   			<input type="submit" value="Upload Photo">
 		</form>            
+        <h2>Convert Submitted Photo</h2>
+        <button onclick="window.location.href='/run-python-function'">Run Python Function</button>
         </body>
     </html>
     '''
@@ -114,6 +116,13 @@ def y():
 def z():
     return send_from_directory('static', 'z.html') 
 
+@app.route('/run-python-function')
+def runpythonfunction():
+     # Run hello_world.py and capture the output
+    print("CAN YOU SEE THIS?")
+    result = subprocess.run(['python', 'py/hello_world.py'], capture_output=True, text=True)
+    return f"Output: {result.stdout}"
+
 
 
 @app.route('/upload', methods=['POST'])
@@ -147,8 +156,26 @@ def upload_file():
 
         # Try to get most recent submission 
         image = get_most_recent_blob_photo()
+        #result = subprocess.run(['python', 'py/hello_world.py', local_file_path], capture_output=True, text=True)
+        #print("result output: " + result.stdout)
+
+
+        # Try running a python file...
+
+        # Cells for 5to10cells example
+        ###from coordsToCells_practice import testcase1 # try this
+        cells = [[1, 2, 3, 5], [1, 5], [], [1, 2], [1, 5], [], [1, 2, 3], [2, 4], [1, 2, 4, 5], [1, 2, 5]]
+        
+        # Convert the list to a JSON string
+        print("cells = " + str(cells))
+        cells_json = json.dumps(cells) 
+        print("cells_json = " + str(cells_json))
+        result = subprocess.run(['python', 'py/hello_world.py', cells_json], capture_output=True, text=True)
+        
+        print("result output: " + result.stdout)
 
         return f"Photo uploaded successfully: {file.filename}"
+        
 
 @app.route('/download', methods=['GET'])
 def download_file():
