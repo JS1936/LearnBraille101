@@ -172,7 +172,7 @@ def upload_file():
         print("cells_json = " + str(cells_json))
         result = subprocess.run(['python', 'py/hello_world.py', cells_json], capture_output=True, text=True)
         
-        print("result output: " + result.stdout)
+        #print("result output: " + result.stdout)
         return f"Result from subprocess: {result.stdout}"
         # return f"Photo uploaded successfully: {file.filename}"
         

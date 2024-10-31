@@ -84,3 +84,6 @@ def cellsToText(cells):
 
     # Saving the data into the HTML file
     output_file.close()
+
+    # Return output so that it can later be displayed to user
+    return output_text
