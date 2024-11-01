@@ -62,7 +62,7 @@ def photo():
         <body>
 		<h1>Convert UEB to English Digital Text</h1>
 		<h2>Download Example Photo</h2>
-		<img src="https://capstonestorage123.blob.core.windows.net/mycontainer/uploaded_photo1728964649459844428.png"/>
+        <img src="https://capstonestorage123.blob.core.windows.net/mycontainer/uploaded_photo1728964649459844428.png" alt="Example photo. Part of the phrase 'let there be light' written in grade 2 Unified English Braille." />
 		<form action="/download" method="get">
     			<button type="submit">Download Photo</button>
 		</form>
