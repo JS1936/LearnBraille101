@@ -1,6 +1,9 @@
 """
     Given a single-braille-line testcase,
     store the cell makeup of each cell in the list "cells".
+
+
+    Update: replaced 0 cell with [] cell
 """
 import math
 import sys
@@ -71,9 +74,11 @@ testcase_sheet_title = {
 
 cols = dict()
 def print_testcase(testcase):
+    print("\n-----------------") # added
     for key in testcase:
         values = testcase[key]
         print(str(key) + ": " + str(values))
+    print("\n-----------------") # added
 
 #def print_globals():
     #print("-------Globals:---------")
@@ -123,6 +128,8 @@ def getCellsFromCols(avg_distance_between_adjacent_dots):
         4. Large:       col2, jump empty cell, col1
     """
     print("getCellsFromCols")
+    print("cells = " + str(cells))
+    print("cols  = " + str(cols))
     keys_list = list(cols.keys())
     start_key = keys_list[0]
 
@@ -169,7 +176,8 @@ def getCellsFromCols(avg_distance_between_adjacent_dots):
 
         else:
             print("large diff (space?)")
-            cells.append(0)
+            empty_list = []
+            cells.append(empty_list) # prev: cells.append(0)
             cells_index += 1
             cells.append(cols[curr_key]) #?
             cells_index += 1
@@ -179,6 +187,9 @@ def getCellsFromCols(avg_distance_between_adjacent_dots):
         #    cells_index += 1
         index += 1
         print("cells = " + str(cells) + "\n")
+
+    return cells  #added 10Nov2024
+
         #if index >= 14: #temporary
         #    exit(0)
 
@@ -335,7 +346,7 @@ def testcase_one():
     img_w = 385
     avg_dot_diameter = 10
     avg_distance_between_adjacent_dots = 14
-    do_testcase(img_h, testcase1, avg_dot_diameter, avg_distance_between_adjacent_dots)
+    return do_testcase(img_h, testcase1, avg_dot_diameter, avg_distance_between_adjacent_dots) # added "return"
 
 def testcase_two():
     """
@@ -409,7 +420,11 @@ def do_testcase(img_h, testcase, avg_dot_diameter, avg_distance_between_adjacent
     # print_testcase(cols)
 
     print("----------")
-    getCellsFromCols(avg_distance_between_adjacent_dots)
+    #print("cells (before entering getCellsFromCols")
+
+    cells = getCellsFromCols(avg_distance_between_adjacent_dots) # added "cells = "
+    #print(cells)
+    return cells # added return cells
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':

@@ -10,6 +10,8 @@
 import sys
 from PIL import Image
 from cellsToText_practice import cellsToText
+from coordsToCells_practice import testcase_one
+
 
 import json
 
@@ -32,20 +34,30 @@ if __name__ == '__main__':
         sys.exit(1)
 
 
-    #print("Welcome to hello_world.py")
-    # Get the JSON string from the command line argument
-    cells_json = sys.argv[1]
+    # from coords, get cells
+    print("HELLO-- expect to enter testcase_one")
+    cells = testcase_one()
+    print("HELLO-- done calling testcase_one. Expect to see cells print out now")
+    print("cells --> " + str(cells))
+
+
+
+    #### TEMPORARILY COMMENTED OUT  -- expect working -- 
+    # #print("Welcome to hello_world.py")   
+    # # Get the JSON string from the command line argument
+    # cells_json = sys.argv[1]
     
-    # Convert the JSON string back to a list
-    cells = json.loads(cells_json)
+    # # Convert the JSON string back to a list
+    # cells = json.loads(cells_json)
 
-    # Process the cells
-    #process_cells(cells)
+    # # Process the cells
+    # #process_cells(cells)
 
-    #######
+    # #######
 
-    output_text = cellsToText(cells)
-    print("output_text = " + str(output_text))
+    # output_text = cellsToText(cells)
+    # print("output_text = " + str(output_text))
+    #### TEMPORARILY COMMENTED OUT^
 
     # Call cellsToText
     #cellsToText(cells)
