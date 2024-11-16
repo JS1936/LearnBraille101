@@ -17,6 +17,9 @@ from bs4 import BeautifulSoup
 import requests
 
 
+# TRY THIS:
+from selenium.webdriver.chrome.service import Service
+
 # EX is from 5to10cells png
 #note: index 2 cell WAS 0, changed to [], same for index cell 5
 #cells = [[1, 2, 3, 5], [1, 5], [], [1, 2], [1, 5], [], [1, 2, 3], [2, 4], [1, 2, 4, 5], [1, 2, 5]]
@@ -30,7 +33,25 @@ def cellsToText(cells):
     output_text = ""
     # Set up the WebDriver (this example uses Chrome)
 
-    driver = webdriver.Chrome()
+    #driver = webdriver.Chrome()
+
+    
+    #Try this:
+    #service = Service(ChromeDriverManager(version="115.0.5790.170").install())
+    
+    service = Service(ChromeDriverManager().install())
+    driver = webdriver.Chrome(service=service)
+    #driver = webdriver.Chrome(ChromeDriverManager().install())
+    #service = Service()
+    #print("--------| MADE A SERVICE |---------")    # MADE IT HERE
+    #options = webdriver.ChromeOptions()
+    #print("--------| OPTIONS |---------")           # MADE IT HERE
+    #driver = webdriver.Chrome(service=service, options=options)
+    #print("--------| DRIVER |---------")            # FAILED TO MAKE IT HERE
+    #driver = webdriver.Chrome(ChromeDriverManager().install())
+    #driver = webdriver.Chrome(ChromeDriverManager().install()) # Failed
+    #driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager(version='114.0.5735.90').install()))
+    #driver = webdriver.Chrome(ChromeDriverManager(version='114.0.5735.90').install())
     try:
         driver.get("https://abcbraille.com/braille")  # Open the website
         time.sleep(2) # Let the page load
@@ -62,6 +83,7 @@ def cellsToText(cells):
 
         #print("OK_2")
         time.sleep(10)
+        driver.quit() # added
 
     except:
         print("FAILED")

@@ -118,11 +118,11 @@ def y():
 def z():
     return send_from_directory('static', 'z.html') 
 
-@app.route('/run-python-function')
 
 #
 # Dummy function
 #
+@app.route('/run-python-function')
 def runpythonfunction():
      # Run hello_world.py and capture the output
     print("CAN YOU SEE THIS?")
@@ -163,7 +163,7 @@ def upload_file():
         # Get most recent submission 
         image = get_most_recent_blob_photo()
         
-        
+
         result = subprocess.run(['python', 'py/hello_world.py', local_file_path], capture_output=True, text=True)
         
         #also print to console...
