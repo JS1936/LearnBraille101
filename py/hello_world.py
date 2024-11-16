@@ -9,6 +9,8 @@ from coordsToCells_practice import testcase_zero
 import json
 
 if __name__ == '__main__':
+
+    # Check number of arguments
     if len(sys.argv) != 2:
         print("Usage: python hello_world.py <image's local_file_path>")
         sys.exit(1)
