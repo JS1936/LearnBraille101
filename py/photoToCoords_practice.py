@@ -196,58 +196,9 @@ def tile2(filename, dir_in, dir_out, d):
     # try this--> LOOK
     #green_keyW = combo
     green_keyW.clear()
-    green_keyW = combo_sorted.copy()#black_keyW.copy()
+    #green_keyW = combo_sorted.copy()#black_keyW.copy()
 
-
-    # Try isolating the black so that it is one pixel per dot
-    """
-    black = {   
-                21: [10, 11, 12, 13, 24, 25, 37, 38, 44], 
-                22: [11, 31, 43, 44], 
-                23: [16, 17, 18, 29, 30, 42, 43],
-                24: [15, 16, 17, 29, 30, 41, 42, 43], 
-                36: [30, 31], 
-                37: [29, 30, 31], 
-                38: [29, 30], 
-                61: [10, 11, 12, 17],
-                62: [10, 11, 16, 17, 18], 
-                63: [16, 17], 
-                64: [16, 17], 
-                76: [29, 30], 
-                77: [28, 29, 30], 
-                127: [22, 29],
-                128: [14, 15, 28, 29], 
-                168: [14, 15], 
-                181: [21, 28], 
-                182: [27, 28], 
-                183: [26, 27], 
-                232: [14, 20, 33],
-                233: [13, 14, 26, 27, 39, 40], 
-                234: [13, 25, 26, 37, 38, 39], 
-                272: [26], 
-                273: [26], 
-                274: [25],
-                286: [6, 7, 12, 13], 
-                287: [11, 12, 13], 
-                313: [12, 13, 25], 
-                314: [11, 12, 23, 24, 25],
-                327: [11, 12, 24, 25], 
-                328: [11, 24], 329: [23, 24], 
-                353: [4, 11, 12], 
-                354: [10, 11, 12, 24, 25],
-                355: [10, 11, 23, 24, 25], 
-                356: [10], 367: [17, 18, 24], 
-                368: [23, 24, 25], 369: [23, 24, 25],
-                370: [21, 22, 23, 24]}
-    """
     combo_consolidated, avgDotDiameter = consolidate_all(combo_sorted)
-    #combo_consolidated, avgDotDiameter = consolidate_all(green_keyW)
-    #consolidatedGreen, avgDotDiameter = consolidate(green_keyW)
-
-    #exit(0)
-    ###drawLines(reassembled_img, thriceConsolidated, estimated_distance_between_corresponding_dots_in_one_cell_directly_below)
-    #drawLinesHorizontal(reassembled_img, thriceConsolidated, estimated_distance_between_corresponding_dots_in_one_cell_directly_below)
-
 
     reassembled_img_withOrange = markDots(combo_consolidated, reassembled_img)
 
@@ -445,8 +396,8 @@ def round4_consolidate(twiceConsolidated, avgDotDiameter):
     keys_list = list(twiceConsolidated.keys())
     for key in keys_list:
         values = twiceConsolidated[key]
-        if len(values) > 3:
-            print("key " + str(key) +" has ERROR: > 3 values")
+        #if len(values) > 3:
+        #    print("key " + str(key) +" has ERROR: > 3 values")
         values_list = list(values)
         index = 0
         while index < len(values) - 1:
@@ -663,12 +614,16 @@ def consolidate_all(combo_w):
     ###    estimated_distance_between_two_dots_in_the_same_cell / 2))
     combo_r4_post = round4_consolidate(combo_r3_post,
                                           estimated_distance_between_two_dots_in_the_same_cell)  # was avgDotDiameter, was est without /2
-    print("combo original  = " + str(combo_w))
+    
+    ###print("combo original  = " + str(combo_w))
+
     ###print("combo_r1_post   = " + str(combo_r1_post))
     ###print("combo_r2_post   = " + str(combo_r2_post))
     ###print("save_r3_post    = " + str(save_r3_post))
     ###print("combo_r3_post   = " + str(combo_r3_post))
-    print("combo_r4_post = " + str(combo_r4_post))
+    
+    ###print("combo_r4_post = " + str(combo_r4_post))
+
     ###print(len(combo_r4_post.keys()))
 
 
@@ -900,7 +855,7 @@ def reassembleThePicture(original_image, filename, dir_out, d, grid):
     #for i, j in grid:
     #    print(i, j)
     for i, j in grid:
-        print("i = " + str(i) + ", j = " + str(j))
+        #print("i = " + str(i) + ", j = " + str(j))
         box = (j, i, j + d, i + d)
         curr_filename = str(name) + "_" + str(i) + "_" + str(j) + desired_ext #".jpg? .png?"
         ###print("curr_filename = " + str(curr_filename))
@@ -983,19 +938,15 @@ def findAvgRGB(filename, img2, pixels2):
     img2 = findWhite(filename, img2, pixels2, avg)
     #img2.show() #pixeltion seems okay here
     return avg, img2
-def tile(filename, dir_in, dir_out, d):
-    #print("---tile FUNCTION---")
-    name, ext = os.path.splitext(filename)
-    #print("---1 REACHED---")
-    img = Image.open(os.path.join(dir_in, filename))
-    # Is the absolute path not being passed in?
-    #print("---2 REACHED---")
-    w, h = img.size
-    #print("---3 REACHED---")
 
-    ###print("image size = " + str(img.size))
-    ###print("w = " + str(w))
-    ###print("h = " + str(h))
+def tile(filename, dir_in, dir_out, d):
+
+    # Get image and basic image information
+    name, ext = os.path.splitext(filename)
+    img = Image.open(os.path.join(dir_in, filename))
+    w, h = img.size
+
+    # Get avg pixel value
     pixel_values = list(img.getdata())
     pixel_sums = []
     for pixel in pixel_values:
@@ -1004,42 +955,41 @@ def tile(filename, dir_in, dir_out, d):
     picture_sum = 0
     for pixel_sum in pixel_sums:
         picture_sum += pixel_sum
-    ###print("picture_sum = " + str(picture_sum))
     avg = picture_sum / len(pixel_values)
+    ###print("picture_sum = " + str(picture_sum))
     ###print("avg = " + str(avg))
 
-    img2 = img.copy()
 
+    # Get average rgb using a copy of the image, then return the image
+    img2 = img.copy()
     pixels2 = img2.load()  # create the pixel map
     avgRGB_clean, img2 = findAvgRGB(filename, img2, pixels2)
-    ###print("avgRGB_clean = " + str(avgRGB_clean))
-    ######avgJump = findAvgJump(peaks)
-    ######peaks = removeMiniJumps(peaks, avgJump) # re-add later
-    ###print("avg_dot_base_diameter = " + str(avg_dot_base_diameter))
-    #img2.show() #pixelation seems okay by here
+
     return img2
 
 
 # Defining main function
 # TODO: accept file path, use that file
 def getCoords(img, photo_path):
-    #uploads/downloaded_example_photo.png
+
+    # Get absolute path to photo (a.k.a. img)
     abs_path = os.path.abspath(photo_path)
     abs_path_pieces = abs_path.split("/")
     
+    # Get filename from absolute path's pieces
     filename = abs_path_pieces[-1]
-    #dir_in = abs_path.replace(filename,'')
     
-    print("photoPath = " + str(photo_path))
-    print("abs_path   = " + str(abs_path))
+    #print("photoPath = " + str(photo_path))
+    #print("abs_path   = " + str(abs_path))
+
+    # Determine where files will be stored
     dir_in = '/'.join(abs_path_pieces[0:(len(abs_path_pieces)-1)])
     dir_out = str(dir_in + "/tiles")
     
-    print("\nfilename = " + filename)       # OK
-    print("\ndir_in   = " + str(dir_in))    # OK
-    print("\ndir_out  = " + dir_out)        # OK
+    #print("\nfilename = " + filename)       # OK
+    #print("\ndir_in   = " + str(dir_in))    # OK
+    #print("\ndir_out  = " + dir_out)        # OK
 
-    #exit(0)
 
      # Calculate d
     original_file = saveOriginalFile(filename, dir_in)
@@ -1047,13 +997,11 @@ def getCoords(img, photo_path):
     print(d)
 
     # Convert
-    combo_consolidated = tile2(filename, dir_in, dir_out, d) # 38
+    combo_consolidated = tile2(filename, dir_in, dir_out, d)
 
     return combo_consolidated # expect: returns coords
-    
-    #return "returning from getCoords..."
 
-
+"""
 def main():
     print("main")
 
@@ -1098,3 +1046,4 @@ def main():
 # __name__
 if __name__ == "__main__":
     main()
+"""

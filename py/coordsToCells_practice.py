@@ -108,7 +108,7 @@ def column(testcase, key, dividers):
     - len 3: 1,2,3
     """
     values = testcase[key]
-    print(str(key) + ": " + str(values))
+    #print(str(key) + ": " + str(values))
 
     if key not in cols:
         cols.setdefault(key, [])
@@ -116,14 +116,14 @@ def column(testcase, key, dividers):
     if len(values) == 1:  # 1 value. Look at the height
         number = get_single_dot_123(values[0], dividers)
         cols[key].append(number)
-        print("1 value: " + str(number) + "\n")
+        #print("1 value: " + str(number) + "\n")
 
     elif len(values) == 2:
         num_index0 = get_single_dot_123(values[0], dividers)
         num_index1 = get_single_dot_123(values[1], dividers)
         cols[key].append(num_index0)
         cols[key].append(num_index1)
-        print("2 values: " + str(num_index0) + ", " + str(num_index1) + "\n")
+        #print("2 values: " + str(num_index0) + ", " + str(num_index1) + "\n")
 
     elif len(values) == 3:  # full column
         cols[key].append(1)
@@ -147,7 +147,7 @@ def getCellsFromCols(cols, avg_distance_between_adjacent_dots):
     col1to2_buffer = avg_distance_between_adjacent_dots * float(2.5 / 1.6)  # ~21, 22. was float(20/14)
     gap_start = (avg_distance_between_adjacent_dots * 7.6) / 2.5    # alternative: 6.1 instead of 7.6
     ###print("gap_start = " + str(gap_start))
-    print(cols)
+    #print(cols)
     keys_list = list(cols.keys())
     start_key = keys_list[0]
     #cells.append(cols[start_key])
@@ -156,7 +156,7 @@ def getCellsFromCols(cols, avg_distance_between_adjacent_dots):
         curr_key = keys_list[index]
         next_key = keys_list[index + 1]
         diff = abs(next_key - curr_key)
-        print()
+        #print()
 
         #print("[diff = " + str(diff) + "] curr = " + str(curr_key) + ", next = " + str(next_key))
         #print("curr values = " + str(cols[curr_key]))
@@ -214,7 +214,7 @@ def get_single_dot_123456(testcase, key, avg_distance_between_adjacent_dots): # 
     """
 
     keys_list = list(cols.keys())
-    print(keys_list)
+    #print(keys_list)
 
     col1to2_buffer = avg_distance_between_adjacent_dots * float(2.5 / 1.6)  # was float(20/14)
     ###print("col1to2_buffer = " + str(col1to2_buffer))
@@ -362,8 +362,8 @@ def testcase_one():
     avg_distance_between_adjacent_dots = 14
 
     do_testcase(img_h, testcase1, avg_dot_diameter, avg_distance_between_adjacent_dots)
-    ranges = getRowRanges(testcase1, 10)
-    print("ranges = " + str(ranges))
+    #ranges = getRowRanges(testcase1, 10)
+    #print("ranges = " + str(ranges))
 
 def testcase_two():
     """
@@ -379,24 +379,24 @@ def testcase_two():
 
 
 def do_testcase(img_h, testcase, avg_dot_diameter, avg_distance_between_adjacent_dots):
-    print("----------")
-    print_testcase(testcase)
+    #print("----------")
+    #print_testcase(testcase)
 
-    print("----------")
+    #print("----------")
     dividers = get_dividers(img_h, testcase1, avg_dot_diameter, avg_distance_between_adjacent_dots)
-    print("dividers = " + str(dividers))
+    #print("dividers = " + str(dividers))
     columns(testcase, dividers)
 
     print("----------")
     print("cols = " + str(cols))
     get_all_dots_123456(testcase, avg_distance_between_adjacent_dots)
 
-    print("----------")
-    print("cols = " + str(cols))
+    #print("----------")
+    #print("cols = " + str(cols))
     # print_testcase(cols)
 
-    print("----------")
-    print("avg_distance_between_adjacent_dots = " + str(avg_distance_between_adjacent_dots))
+    #print("----------")
+    #print("avg_distance_between_adjacent_dots = " + str(avg_distance_between_adjacent_dots))
     getCellsFromCols(cols, avg_distance_between_adjacent_dots)
 
 # Press the green button in the gutter to run the script.

@@ -80,13 +80,12 @@ def photo():
     '''
     #return render_template('photo.html')
 
+#
+# Static files (except index.html)
+#
 @app.route('/About.html')
 def about():
     return send_from_directory('static', 'About.html') 
-
-# @app.route('/Code.html')
-# def code():
-#     return send_from_directory('static', 'Code.html') 
 
 @app.route('/LearnBraille.html')
 def learnbraille():
@@ -104,6 +103,9 @@ def design():
 def presentation():
     return send_from_directory('static', 'Presentation.html')   
 
+# 
+# Dummy files: x, y, z
+#
 @app.route('/x')
 def x():
     return send_from_directory('static', 'x.html') 
@@ -117,6 +119,10 @@ def z():
     return send_from_directory('static', 'z.html') 
 
 @app.route('/run-python-function')
+
+#
+# Dummy function
+#
 def runpythonfunction():
      # Run hello_world.py and capture the output
     print("CAN YOU SEE THIS?")
@@ -154,29 +160,17 @@ def upload_file():
         with open(local_file_path, "rb") as data:
             blob_client.upload_blob(data)
 
-        # Try to get most recent submission 
+        # Get most recent submission 
         image = get_most_recent_blob_photo()
         
-        #result = subprocess.run(['python', 'py/hello_world.py', local_file_path], capture_output=True, text=True)
-        #print("result output: " + result.stdout)
-
-
-        # Try running a python file...
-
-        # Cells for 5to10cells example
-        ###from coordsToCells_practice import testcase1 # try this
-        #cells = [[1, 2, 3, 5], [1, 5], [], [1, 2], [1, 5], [], [1, 2, 3], [2, 4], [1, 2, 4, 5], [1, 2, 5]]
         
-        # Convert the list to a JSON string
-        #print("cells = " + str(cells))
-        #cells_json = json.dumps(cells) 
-        #print("cells_json = " + str(cells_json))
-        #result = subprocess.run(['python', 'py/hello_world.py', image], capture_output=True, text=True)
         result = subprocess.run(['python', 'py/hello_world.py', local_file_path], capture_output=True, text=True)
         
         #also print to console...
         print("result output: " + result.stdout)
         
+        # Try this:
+        #return '''<html><body><p>This is a paragraph</p></body></html>'''
         return f"subprocess result.stdout: {result.stdout} | \nsubprocess result.stderr: {result.stderr}"
 
         # return f"Photo uploaded successfully: {file.filename}"
@@ -256,38 +250,3 @@ def get_most_recent_blob_photo():
     image.show() # It actually shows up!
 
     return image
-    
-
-
-  
-
-# process the image here...
-
-#string all_blobs = ""
-#for blob in container.list_blobs():
-#    print(f'{blob.name} : {blob.last_modified}')
-    #all_blobs += " | " + blob.name + ":" + blob.last_modified
-
-#return all_blobs
-
-# Download the blob to a local file
-# with open("downloaded_example_photo.png", "wb") as download_file:
-#     download_file.write(blob_client.download_blob().readall())
-#
-#return f"Photo downloaded successfully!"
-
-# THIS ONE:
-# Download the blob to memory (as a BytesIO object)
-#blob_data = blob_client.download_blob().readall()
-#download_stream = io.BytesIO(blob_data)
-
-#file_copy = shutil(file, os.path.dirname(os.path.abspath(__file__)) + file.filename)
-#file_path =  "/Users/jenniferstibbins/PycharmProjects/example/testHoughCircles/Embossed_Braille_subsection_5to10cells.png"
-#os.path.dirname(os.path.abspath(__file__)) + file.filename
-
-#"/Users/jenniferstibbins/PycharmProjects/example/testHoughCircles/Embossed_Braille_subsection_5to10cells.png"
-
-#### Original: ####
-#filepath = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
-#file.save(filepath)
-#return f"Photo uploaded successfully: {file.filename}"

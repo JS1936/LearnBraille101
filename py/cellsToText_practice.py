@@ -22,10 +22,14 @@ import requests
 #cells = [[1, 2, 3, 5], [1, 5], [], [1, 2], [1, 5], [], [1, 2, 3], [2, 4], [1, 2, 4, 5], [1, 2, 5]]
 #def open_abcbraille(driver):
 
+# Current mac laptop (Nov 2024) google chrome version is the following:
+# Version 130.0.6723.119 (Official Build) (arm64)
+
 def cellsToText(cells):
 
     output_text = ""
     # Set up the WebDriver (this example uses Chrome)
+
     driver = webdriver.Chrome()
     try:
         driver.get("https://abcbraille.com/braille")  # Open the website
