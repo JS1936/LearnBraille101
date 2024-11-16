@@ -37,12 +37,12 @@ cells = []
 def predictCellDots(peaks, pixels2, img2, ratio, w, h, isCol1, cell):
     # look at height vals for the row
     # and establish acceptable "borders" between row1, row2, row3
-    print("PREDICT CELL DOTS")
+    ###print("PREDICT CELL DOTS")
     first_peak = peaks[0]
     leftmost_col = first_peak[0]
     leftmost_rows = first_peak[1]
     leftmost_dot = [leftmost_col, leftmost_rows[0]]
-    print("leftmost_dot = " + str(leftmost_dot))
+    ###print("leftmost_dot = " + str(leftmost_dot))
 
     jump_down_amt = max_distance_between_two_dots_in_the_same_cell * ratio
     print("jump_down_amt = " + str(jump_down_amt))
@@ -54,8 +54,8 @@ def predictCellDots(peaks, pixels2, img2, ratio, w, h, isCol1, cell):
     while index < len(leftmost_rows):
         dot2_expect = leftmost_rows[index - 1] + 11
         dot2_possible = leftmost_rows[index]
-        print("dot expected near: " + str(dot2_expect))
-        print("dot found at: " + str(dot2_possible))
+        ###print("dot expected near: " + str(dot2_expect))
+        ###print("dot found at: " + str(dot2_possible))
         # lower bound and upper bound
         if (dot2_possible > (dot2_expect - (jump_down_amt/2))) and (dot2_possible < (dot2_expect + (jump_down_amt/2))):
             if isCol1 == True:
@@ -78,78 +78,9 @@ def predictCellDots(peaks, pixels2, img2, ratio, w, h, isCol1, cell):
     #col2_topDot = [leftmost_col, leftmost_rows[0] + jump_over_amt]
     #print("col2_topDot = " + str(col2_topDot))
 
-    print("cell = " + str(cell))
+    ###print("cell = " + str(cell))
 
 
-    return 0
-def drawPredictionGrid(peaks, pixels2, img2, ratio, w, h): #peaks? dots?
-    print("drawPredictionGrid in progress")
-
-    first_peak = peaks[0]
-    leftmost_col = first_peak[0]
-    leftmost_rows = first_peak[1]
-    leftmost_dot = [leftmost_col, leftmost_rows[0]]
-    print("leftmost_dot = " + str(leftmost_dot))
-    pixels2[leftmost_col, leftmost_rows[0]] = (0, 255, 0) # tiny green dot
-
-
-    #leftmost =
-    # draw col1row1's (jump rightward 6.0*ratio each time)
-    print("ratio = " + str(ratio))
-
-    #pixels2[leftmost_col+ jump_amt, leftmost_rows[0]] = (0, 255, 0)
-    #img2.show()
-    #exit(0)
-
-    jump_amt = max_distance_between_corresponding_dots_in_adjacent_cells * ratio
-    jump_down_amt = max_distance_between_two_dots_in_the_same_cell * ratio
-    #jump_amt2 = min_distance_between_corresponding_dots_in_adjacent_cells * ratio
-    print("jump_across_amt = " + str(jump_amt))
-    print("jump_down_amt = " + str(jump_down_amt))
-    indexW = leftmost_col
-    #indexW2 = leftmost_rows[0]
-    indexH = leftmost_rows[0]
-    while indexW < w: # revisit this
-        print("indexW = " + str(indexW) + "; w = " + str(w) + "; h = " + str(h))
-        pixels2[indexW, indexH] = (0, 255, 0)  # tiny green dot
-        pixels2[indexW -1, indexH] = (0, 255, 0)
-        pixels2[indexW + 1, indexH] = (0, 255, 0)
-
-        if (indexH + jump_down_amt) < h:
-            pixels2[indexW - 1, indexH + jump_down_amt] = (0, 255, 0)
-        if (indexH + 2*jump_down_amt) < h:
-            pixels2[indexW + 1, indexH + (jump_down_amt * 2)] = (0, 255, 0)
-        #pixels2[indexW2, indexH] = (255, 0, 0) # tiny red dot
-
-        indexW += (jump_amt)  # is that okay? # int(jump_amt)
-
-
-    #img2.show()
-    # from leftmost, move down by 2.3*ratio, then do the same thing to do col1srow2's
-
-    # repeat again for col1row3s
-    # --------------------------
-    # now need to do col2s: repeat the whole previous process, but move to col2 instead of col1
-    # "offset"
-
-    indexW = leftmost_col + jump_down_amt
-    while indexW < w:  # revisit this
-        print("indexW = " + str(indexW) + "; w = " + str(w))
-        pixels2[indexW, indexH] = (128, 0, 128)  # tiny purple dot
-        pixels2[indexW - 1, indexH] = (128, 0, 128)
-
-
-
-
-
-        if (indexH + jump_down_amt) < h:
-            pixels2[indexW - 1, indexH + jump_down_amt] = (128, 0, 128)
-        if (indexH + 2 * jump_down_amt) < h:
-            pixels2[indexW + 1, indexH + (jump_down_amt * 2)] = (128, 0, 128)
-        # pixels2[indexW2, indexH] = (255, 0, 0) # tiny red dot
-
-        indexW += (jump_amt)  # is that okay? # int(jump_amt)
-    #img2.show()
     return 0
 
 def saveOriginalFile(filename, dir_in):
@@ -950,47 +881,9 @@ EX: 12.256578947368421
             diffsCount += 1
             index += 1
 '''
-def readHorizontalLine(reassembled_img, curr_h):
-    print("--read horizontal line: curr_h = " + str(curr_h))
-    pixels2 = reassembled_img.load()  # create the pixel map
-    w = reassembled_img.size[0]
-    h = reassembled_img.size[1]
 
-    dots = []
-    green = []
-    black = []
-    for curr_w in range(w):
-            # look for green pixels
-            r,g,b,a = pixels2[curr_w,curr_h] # current pixel
-            #print("(" + str(curr_h) + ", " + str(curr_w) + ") = " + str(pixels2[curr_w, curr_h]))
-            if r == 0 and g == 255 and b == 0:
-                print("found a green dot!")
-            if r == 255 and g == 255 and b == 255:
-                print("found a black dot!")
-            # look for black pixels
 
-    #green = []
-    #black = []
 
-# orange: big contrast between adjacent cells (a "catch-all")
-def addOrangeOverlay(img2, pixels2):
-    for i in range(img2.size[0]):  # for every pixel:        # w
-        for j in range(img2.size[1]):  # h
-            curr_pixel = pixels2[i, j]
-            curr_pixel_sum = curr_pixel[0] + curr_pixel[1] + curr_pixel[2]
-
-            # turn a pixel orange if adjacent cell (one rightward or one downward) has sum diff > 100
-            if (i + 1) in range(img2.size[0]):
-                next_pixel = pixels2[i + 1, j]
-                next_pixel_sum = next_pixel[0] + next_pixel[1] + next_pixel[2]
-                if abs(curr_pixel_sum - next_pixel_sum) > 100:
-                    pixels2[i, j] = (255, 165, 0)  # orange
-            if (j + 1) in range(img2.size[1]):
-                next_pixel = pixels2[i, j + 1]
-                next_pixel_sum = next_pixel[0] + next_pixel[1] + next_pixel[2]
-                if abs(curr_pixel_sum - next_pixel_sum) > 100:
-                    pixels2[i, j] = (255, 165, 0)  # orange
-    return img2
 # Note: could also look for pixel sum difference (adj or diagonal)
 # black: shadows
 # green: bright white
@@ -1235,35 +1128,6 @@ def identifyRow(peaks, avgDotDiameter, img2, w, h, pixels2):
 
     #img2.show()
 
-
-# Now, if adjacent keys are closer than avgJump, get rid of one of them (does it matter which one…?)
-def removeMiniJumps(peaks, avgJump):
-    index = 0
-    #count_duplicates = 0
-    #count_nonduplicates = 0
-    while index < len(peaks):
-        print(peaks[index])
-        if index > 0:
-            curr_peak = peaks[index]
-            prev_peak = peaks[index - 1]
-            print("curr_peak = " + str(curr_peak))
-            curr_key = curr_peak[0]
-            prev_key = prev_peak[0]
-            if abs(curr_key - prev_key) < (avgJump)/2: # fix this # is abs even needed?
-                print("We found a duplicate!")
-                peaks.remove(peaks[index])
-                #exit(0)
-                #index -= 1 # in case of multiple consecutive duplicates
-                #count_duplicates += 1
-            #else:
-                #count_nonduplicates += 1
-        index += 1
-    print("peaks being returned: " + str(peaks))
-    #print("count_duplicates    = " + str(count_duplicates))
-    #print("count_nonduplicates = " + str(count_nonduplicates))
-    #exit(0)
-    return peaks
-
 def findAdjacentDuplicates(peaks, img2, pixels2):
     index = 0
     while index < len(peaks) - 1:
@@ -1507,145 +1371,6 @@ def main():
     #   - Note: key 21 currently has 4 values instead of 3. Values at indices 2 and 3 are too close
 
 
-def swap(thriceConsolidated, avgDotDiameter):
-    #keys = thriceConsolidated.keys()
-    print("original = " + str(thriceConsolidated.items()))
-    swapped = dict()
-    for key, values in thriceConsolidated.items():
-        for value in values:
-            if value not in swapped.keys():
-                swapped.setdefault(value, [])
-            swapped[value].append(key)
-    sorted_swapped = dict(sorted(swapped.items()))#sort(swapped)#swapped.sort()
-    print("sorted_swapped = " + str(sorted_swapped))
-    print("avg dot diameter = " + str(avgDotDiameter))
-    return sorted_swapped
-    #exit(0)
-    #for key in sorted_swapped.keys():
-    #    print(str(key))
-
-# has some extra "jumps"...
-def drawLinesHorizontal2(reassembled_img, sorted_swapped, distance):
-    print("HERE")
-    keys_list = list(sorted_swapped.keys()) # height values, NOT width values
-    if len(keys_list) < 2:
-        return
-
-    w, h = reassembled_img.size
-    pixels = reassembled_img.load()
-
-    curr_index = 1
-    num_diffs = 1
-    sum_diffs = abs(keys_list[curr_index] - keys_list[curr_index - 1])
-
-    while curr_index < len(keys_list) -1:
-        diffCurrPrev = abs(keys_list[curr_index] - keys_list[curr_index - 1])
-        diffCurrNext = abs(keys_list[curr_index] - keys_list[curr_index + 1])
-        curr = keys_list[curr_index]
-        next = keys_list[curr_index +1]
-        if abs(curr - next) >= distance * 0.5:#9: # change the 9 so that it scales to work for each picture
-            print("\ndiffCurrNext = " + str(diffCurrNext))
-            print("diffCurrPrev = " + str(diffCurrPrev))
-            print("next value = " + str(keys_list[curr_index+1]) + " --> That's a jump!")
-
-            drawHeight = int((keys_list[curr_index] + keys_list[curr_index + 1]) / 2)
-            index_w = 0
-            while index_w < w:
-                pixels[index_w, drawHeight] = (0, 0, 0)
-                index_w += 1
-        curr_index += 1
-    reassembled_img.show()
-def drawLinesHorizontal(reassembled_img, thriceConsolidated, estimated_distance_between_corresponding_dots_in_one_cell_directly_below):
-    keys = list(thriceConsolidated.keys())
-
-    # Find dot closest to top of picture
-    w, h = reassembled_img.size
-    min = h
-    for key in thriceConsolidated.keys():
-        values = thriceConsolidated[key]
-        for value in values:
-            if value < min:
-                print("key = " + str(key) + ", value = " + str(value))
-                min = value
-    print("min = " + str(min))
-
-
-    # Start with highest dot
-    pixels = reassembled_img.load()
-    index_w = 0
-    while index_w < w:
-        pixels[index_w, min] = (255, 165, 0)
-        index_w += 1
-
-
-    index_h = min + estimated_distance_between_corresponding_dots_in_one_cell_directly_below/2 # why /2?
-    while index_h < h:
-        index_w = 0
-        while index_w < w:
-            pixels[index_w, index_h] = (255, 165, 0)
-            index_w += 1
-        index_h += estimated_distance_between_corresponding_dots_in_one_cell_directly_below/2
-        index_w += 1
-    #new_h = min + estimated_distance_between_corresponding_dots_in_one_cell_directly_below/2
-
-
-
-    #startKey = keys[0] # width
-    #values = thriceConsolidated[startKey]
-    #startValue = values[0]
-    #startCoord = startKey,startValue
-    #print("startCoord = " + str(startCoord))
-    """
-    print("startKey = " + str(startKey))
-    pixels = reassembled_img.load()
-    w, h = reassembled_img.size
-    print(w,h)
-    curr_h = 0
-
-    for key in keys:
-        print("key = " + str(key))
-        curr_h = 0
-        while curr_h < h:
-            pixels[key, curr_h] = (0, 0, 0)
-            curr_h += 1
-    # repetitive...
-    for key in keys:
-        values = thriceConsolidated[key]
-        for value in values:
-            curr_w = 0
-            while curr_w < w:
-                pixels[curr_w, value] = (255, 255, 255)
-                curr_w += 1
-    """
-
-    reassembled_img.show()
-# find uppermost dot and do 10mm * ratio down and draw a line across the picture in blue for each
-def drawLines(reassembled_img, thriceConsolidated, estimated_distance_between_corresponding_dots_in_one_cell_directly_below):
-    keys = list(thriceConsolidated.keys())
-    startKey = keys[0] # width
-    print("startKey = " + str(startKey))
-    pixels = reassembled_img.load()
-    w, h = reassembled_img.size
-    print(w,h)
-    curr_h = 0
-
-    for key in keys:
-        print("key = " + str(key))
-        curr_h = 0
-        while curr_h < h:
-            pixels[key, curr_h] = (255, 255, 255)
-            curr_h += 1
-    # repetitive...
-    """for key in keys:
-        values = thriceConsolidated[key]
-        for value in values:
-            curr_w = 0
-            while curr_w < w:
-                pixels[curr_w, value] = (255, 255, 255)
-                curr_w += 1
-    """
-
-    reassembled_img.show()
 
 # Using the special variable
 # __name__
