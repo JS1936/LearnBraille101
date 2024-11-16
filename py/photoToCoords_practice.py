@@ -33,56 +33,6 @@ max_distance_between_corresponding_dots_in_one_cell_directly_below = 10.2
 cells = []
 
 
-# try feeding it in knowing whether it's col1 or col2 (when doing append, just do num + 3 if col2)
-def predictCellDots(peaks, pixels2, img2, ratio, w, h, isCol1, cell):
-    # look at height vals for the row
-    # and establish acceptable "borders" between row1, row2, row3
-    ###print("PREDICT CELL DOTS")
-    first_peak = peaks[0]
-    leftmost_col = first_peak[0]
-    leftmost_rows = first_peak[1]
-    leftmost_dot = [leftmost_col, leftmost_rows[0]]
-    ###print("leftmost_dot = " + str(leftmost_dot))
-
-    jump_down_amt = max_distance_between_two_dots_in_the_same_cell * ratio
-    print("jump_down_amt = " + str(jump_down_amt))
-    # 17 + 11(1.5) = 17 + 11 + 5.5 = 33.5. If val is > 22.5 and val < 33.5
-    cell.append(1)
-
-
-    index = 1
-    while index < len(leftmost_rows):
-        dot2_expect = leftmost_rows[index - 1] + 11
-        dot2_possible = leftmost_rows[index]
-        ###print("dot expected near: " + str(dot2_expect))
-        ###print("dot found at: " + str(dot2_possible))
-        # lower bound and upper bound
-        if (dot2_possible > (dot2_expect - (jump_down_amt/2))) and (dot2_possible < (dot2_expect + (jump_down_amt/2))):
-            if isCol1 == True:
-                cell.append(index + 1)
-            else:
-                cell.append(index + 4)
-        index += 1
-
-    # try to get a sense of col2
-    #jump_over_amt = max_distance_between_corresponding_dots_in_adjacent_cells * ratio
-    #dot_expect = leftmost_col + jump_over_amt
-    #dot_lowerBound = dot_expect - (jump_over_amt/2)
-    #dot_upperBound = dot_expect + (jump_over_amt/2)
-
-    #print("jump_over_amt    = " + str(jump_over_amt))
-    #print("leftmost_col     = " + str(leftmost_col))
-    #print("dot_expect       = " + str(dot_expect))
-    #print("dot_lowerBound   = " + str(dot_lowerBound))
-    #print("dot_upperBound   = " + str(dot_upperBound))
-    #col2_topDot = [leftmost_col, leftmost_rows[0] + jump_over_amt]
-    #print("col2_topDot = " + str(col2_topDot))
-
-    ###print("cell = " + str(cell))
-
-
-    return 0
-
 def saveOriginalFile(filename, dir_in):
     name, ext = os.path.splitext(filename)
     img = Image.open(os.path.join(dir_in, filename))
@@ -92,20 +42,19 @@ def saveOriginalFile(filename, dir_in):
     #rgb_img.save(filename + ".jpg")
 
     return img
-    #return rgb_img
 
 def tile2(filename, dir_in, dir_out, d):
 
     # Open img from filename
-    print("filename = " + str(filename))
+    ###print("filename = " + str(filename))
     name, ext = os.path.splitext(filename)
     desired_ext = ".png"
     img = Image.open(os.path.join(dir_in, name + desired_ext)) # filename
     w, h = img.size
     img.show()
-    print("image size = " + str(img.size))
-    print("w = " + str(w))
-    print("h = " + str(h))
+    ###print("image size = " + str(img.size))
+    ###print("w = " + str(w))
+    ###print("h = " + str(h))
     pixel_values = list(img.getdata())
 
     # Split img into pieces (like a puzzle) and do dot detection. After, do reassembly.
@@ -122,10 +71,10 @@ def tile2(filename, dir_in, dir_out, d):
 
 
     # take care of "leftovers"
-    print("h - h % d = " + str(h - h % d))
-    print("w - w % d = " + str(w - w % d))
-    print("h % d = " + str(h % d))
-    print("w % d = " + str(w % d))
+    ###print("h - h % d = " + str(h - h % d))
+    ###print("w - w % d = " + str(w - w % d))
+    ###print("h % d = " + str(h % d))
+    ###print("w % d = " + str(w % d))
     tile_rightmost_start = w - w % d
     tile_lowest_start = h - h % d
 
@@ -133,13 +82,13 @@ def tile2(filename, dir_in, dir_out, d):
     if h % d != 0:
         curr_w = 0
         while curr_w < w:
-            print("h = " + str(h) + ", curr_w = " + str(curr_w))
-            print("--> tile_lowest_start = " + str(tile_lowest_start))
+            ###print("h = " + str(h) + ", curr_w = " + str(curr_w))
+            ###print("--> tile_lowest_start = " + str(tile_lowest_start))
 
             #box = (j, i, j + d, i + d)
             box = (curr_w, tile_lowest_start, curr_w + d, h)
             out = os.path.join(dir_out, f'{name}_{tile_lowest_start}_{curr_w}{desired_ext}') #ext
-            print("out = " + str(out))
+            ###print("out = " + str(out))
             img.crop(box).save(out)
             #img.show()
 
@@ -156,12 +105,12 @@ def tile2(filename, dir_in, dir_out, d):
     if w % d != 0:
         curr_h = 0
         while curr_h < h:
-            print("w = " + str(w) + ", curr_h = " + str(curr_h))
-            print("--> tile_rightmost_start = " + str(tile_rightmost_start))
+            ###print("w = " + str(w) + ", curr_h = " + str(curr_h))
+            ###print("--> tile_rightmost_start = " + str(tile_rightmost_start))
             #box = (j, i, j + d, i + d)
             box = (tile_rightmost_start, curr_h, w, curr_h + d)
             out = os.path.join(dir_out, f'{name}_{curr_h}_{tile_rightmost_start}{desired_ext}') #ext
-            print("out = " + str(out))
+            ###print("out = " + str(out))
             img.crop(box).save(out)
             #img.show()
 
@@ -218,9 +167,9 @@ def tile2(filename, dir_in, dir_out, d):
 
     standard_min_distance_between_6High_2Low = 5.4 # 11.0 - 2*2.5 # 10.0 - 4.6 = 5.4
     diameterRatio = avgDiameter / min_dot_base_diameter
-    print("diameterRatio = " + str(diameterRatio))
+    ###print("diameterRatio = " + str(diameterRatio))
     avg6H2LDiff = diameterRatio * 5.4
-    print("avg6H2LDiff = " + str(avg6H2LDiff))
+    ###print("avg6H2LDiff = " + str(avg6H2LDiff))
 
     #       average dot diameter        average 6High 2Low diff
     #       --------------------    =   ------------------------
@@ -229,9 +178,9 @@ def tile2(filename, dir_in, dir_out, d):
     #
     #   Therefore, average6High2Low diff = (averageDotDiameter * standard62) / standard dot diameter
     #
-    print("averageDiameter = " + str(avgDiameter))
+    ###print("averageDiameter = " + str(avgDiameter))
     #average6High2LowDiff = (avgDiameter * standard_min_distance_between_6High_2Low) / min_dot_base_diameter
-    print("average6High2LowDiff = " + str(avg6H2LDiff))
+    ###print("average6High2LowDiff = " + str(avg6H2LDiff))
     #exit(0)
 
 
@@ -315,13 +264,13 @@ def tile2(filename, dir_in, dir_out, d):
 #previously named "consolidateAgain(twiceConsolidated, avgDotDiameter)"
 def round4_consolidate(twiceConsolidated, avgDotDiameter):
 
-    print("twiceConsolidated = " + str(twiceConsolidated))
+    ###print("twiceConsolidated = " + str(twiceConsolidated))
     #exit(0)
     avgDotRadius = avgDotDiameter / 2
-    print("\navgDotDiameter = " + str(avgDotDiameter))
-    print("avgDotRadius   = " + str(avgDotRadius))  # EX: for 2cell screenshot, avgDotRadius is 46.30666...
+    ###print("\navgDotDiameter = " + str(avgDotDiameter))
+    ###print("avgDotRadius   = " + str(avgDotRadius))  # EX: for 2cell screenshot, avgDotRadius is 46.30666...
     keys_list = list(twiceConsolidated.keys())
-    print("keys_list = " + str(keys_list))
+    ###print("keys_list = " + str(keys_list))
 
     keys_index = 1
     keys_to_remove = [] #what if you did keys to keep instead of keys to remove
@@ -347,10 +296,10 @@ def round4_consolidate(twiceConsolidated, avgDotDiameter):
         curr_next_key_diff = abs(curr_key - next_key)
 
         # print
-        print("\ncurr_key = " + str(curr_key) + "(" + str(curr_len) + ")")
+        ###print("\ncurr_key = " + str(curr_key) + "(" + str(curr_len) + ")")
         #print("prev_key = " + str(prev_key) + "(" + str(prev_len) + ")")
         #print("next_key = " + str(next_key) + "(" + str(next_len) + ")")
-        print("avgDotRadius = " + str(avgDotRadius)) #~9 for 5to10cells
+        ###print("avgDotRadius = " + str(avgDotRadius)) #~9 for 5to10cells
         #print("curr_prev_key_diff = " + str(curr_prev_key_diff))
         #print("curr_next_key_diff = " + str(curr_next_key_diff))
 
@@ -358,10 +307,10 @@ def round4_consolidate(twiceConsolidated, avgDotDiameter):
         if curr_prev_key_diff < avgDotRadius:  # same cell. Keep whichever picks up more dots (up to 3) # was avgDotRadius
                 if curr_len >= prev_len:
                     keys_to_remove.append(prev_key)
-                    print("expect to remove key (prev) " + str(prev_key))
+                    ###print("expect to remove key (prev) " + str(prev_key))
                 else:
                     keys_to_remove.append(curr_key)
-                    print("expect to remove key (curr) " + str(curr_key))
+                    ###print("expect to remove key (curr) " + str(curr_key))
         #else:
         #    print("Found a key to keep! Key: " + str(curr_key))
         #    keys_to_keep.append(prev_key)
@@ -369,7 +318,7 @@ def round4_consolidate(twiceConsolidated, avgDotDiameter):
         if curr_key in keys_to_remove:
             curr_key = prev_key
 
-        print("keys_list = " + str(keys_list))
+        ###print("keys_list = " + str(keys_list))
         #print("keys_to_remove = " + str(keys_to_remove))
         #5to10cells:
         #keys_list = [15, 18, 21, 22, 34, 57, 61, 63, 73, 119, 124, 164, 176, 181, 182, 224, 229, 269, 282, 286, 287,
@@ -377,20 +326,20 @@ def round4_consolidate(twiceConsolidated, avgDotDiameter):
         #exit(0)
         # changed from if to while
         while abs(curr_key - next_key) <= avgDotRadius:#radius? # if or while?
-                print("curr_key = " + str(curr_key) + ", next_key = " + str(next_key) + ", keys_index = " + str(keys_index))
-                print("curr = " + str(twiceConsolidated[curr_key]))
-                print("next = " + str(twiceConsolidated[next_key])) # this has 4 when it should have max 3. That means something is wrong with the choosing of keys EARLIER.
+                ###print("curr_key = " + str(curr_key) + ", next_key = " + str(next_key) + ", keys_index = " + str(keys_index))
+                ###print("curr = " + str(twiceConsolidated[curr_key]))
+                ###print("next = " + str(twiceConsolidated[next_key])) # this has 4 when it should have max 3. That means something is wrong with the choosing of keys EARLIER.
 
                 curr_len = len(twiceConsolidated[curr_key]) # added 8/30, effects not checked
                 next_len = len(twiceConsolidated[next_key]) # added 8/30, effects not checked
                 if curr_len >= next_len:  # is this correct? Should it be next_len >= curr_len? Does it matter?
-                    print("curr_len > next_len and diff <= avgDotRadius, so add next_key to keys_to_remove")
+                    ###print("curr_len > next_len and diff <= avgDotRadius, so add next_key to keys_to_remove")
                     keys_to_remove.append(next_key)
                     #del twiceConsolidated[next_key] #added
                     next_key = keys_list[keys_index + 1] # try this
                     keys_index += 1  # want to skip over next_key in keys_list
                 else:
-                    print("curr_len < next_len and diff <= avgDotRadius, so add curr_key to keys_to_remove")
+                    ###print("curr_len < next_len and diff <= avgDotRadius, so add curr_key to keys_to_remove")
                     keys_to_remove.append(curr_key)
                     keys_index += 1
                     curr_key = keys_list[keys_index]
@@ -425,13 +374,13 @@ def round4_consolidate(twiceConsolidated, avgDotDiameter):
 
 
     # Remember to deal with the last one...
-    print("keys_to_remove = " + str(keys_to_remove))
+    ###print("keys_to_remove = " + str(keys_to_remove))
     #print("keys_to_keep = " + str(keys_to_keep))
     index = 0
     while index < len(keys_to_remove):
         key = keys_to_remove[index]
-        print("key to remove= " + str(key))
-        print("twiceConsolidated.keys() = " + str(twiceConsolidated.keys()))
+        ###print("key to remove= " + str(key))
+        ###print("twiceConsolidated.keys() = " + str(twiceConsolidated.keys()))
         if key in twiceConsolidated.keys():
             del twiceConsolidated[key]
         index += 1
@@ -473,8 +422,8 @@ def round4_consolidate(twiceConsolidated, avgDotDiameter):
     keys_list = list(twiceConsolidated.keys())
     last = keys_list[-1]
     second_last = keys_list[-2]
-    print("last = " + str(keys_list[-1]))
-    print("second_last = " + str(keys_list[-2]))
+    ###print("last = " + str(keys_list[-1]))
+    ###print("second_last = " + str(keys_list[-2]))
     last_diff = abs(last - second_last)
     if last_diff < avgDotRadius:
         numValues_last = len(twiceConsolidated[last])
@@ -488,8 +437,8 @@ def round4_consolidate(twiceConsolidated, avgDotDiameter):
         else:
             del twiceConsolidated[last]
             #twiceConsolidated.remove(last)
-    print("last_diff = " + str(last_diff))
-    print("twiceConsolidated = " + str(twiceConsolidated))
+    ###print("last_diff = " + str(last_diff))
+    ###print("twiceConsolidated = " + str(twiceConsolidated))
 
 
     # go through looking for excess len
@@ -503,11 +452,11 @@ def round4_consolidate(twiceConsolidated, avgDotDiameter):
         while index < len(values) - 1:
             # compare curr and next value
             diff = abs(values_list[index] - values_list[index + 1])
-            print("diff = " + str(diff) + ", radius = " + str(avgDotRadius))
+            ###print("diff = " + str(diff) + ", radius = " + str(avgDotRadius))
             if diff < avgDotRadius:
-                print("before-> " + str(values))
+                ###print("before-> " + str(values))
                 values.remove(values_list[index])
-                print("after--> " + str(values))
+                ###print("after--> " + str(values))
                 twiceConsolidated[key] = values
                 #values_list.remove(values_list[index])
 
@@ -529,7 +478,7 @@ def markDots(thriceConsolidated, reassembled_img):
 
 # ALTERNATIVE: for every green dot, count forward as far as you can staying green and track the lengths
 def calculateAvgDotDiameter(reassembled_img):
-    print("--calculate average dot diameter--")
+    ###print("--calculate average dot diameter--")
     pixels = reassembled_img.load()
     w, h = reassembled_img.size
 
@@ -548,7 +497,7 @@ def calculateAvgDotDiameter(reassembled_img):
 
                 if prev_pixel[0] != 0 or prev_pixel[1] != 255 or prev_pixel[2] != 0: # pixel is not green
                     if curr_pixel[0] == 0 and curr_pixel[1] == 255 and curr_pixel[2] == 0: # pixel is green
-                        print("found a green pixel! start of the diameter")
+                        ###print("found a green pixel! start of the diameter")
                         start = j
                         #exit(0)
 
@@ -569,7 +518,7 @@ def calculateAvgDotDiameter(reassembled_img):
                             end = -1
 
                     else: # curr pixel is not green
-                        print("end of the diameter")
+                        ###print("end of the diameter")
                         end = j
                         if start != -1 and end != -1: # is this if-statement even needed?
                             radius = abs(end - start + 1)
@@ -577,7 +526,7 @@ def calculateAvgDotDiameter(reassembled_img):
                         start = -1
                         end = -1
         #exit(0)
-    print("radii = " + str(radii))
+    ###print("radii = " + str(radii))
     sum = 0
     for radius in radii:
         sum += radius
@@ -585,8 +534,8 @@ def calculateAvgDotDiameter(reassembled_img):
     #avg_diameter = avg_radius * 2
     avg_diameter = int(avg_radius) * 2
 
-    print("avg radius = " + str(avg_radius))
-    print("avg diameter = " + str(avg_diameter))
+    ###print("avg radius = " + str(avg_radius))
+    ###print("avg diameter = " + str(avg_diameter))
 
     return avg_diameter
 
@@ -691,36 +640,36 @@ def consolidate_all(combo_w):
 
     # Round 1
     combo_r1_post, avgDotDiameter = round1_consolidate(combo_w)
-    print("combo_r1_post = " + str(combo_r1_post))
+    ###print("combo_r1_post = " + str(combo_r1_post))
 
     # Round 2
     combo_r2_post = round2_consolidate(combo_r1_post, avgDotDiameter)
-    print("combo_r2_post   = " + str(combo_r2_post))
-    print("keys = " + str(combo_r2_post.keys()))
+    ###print("combo_r2_post   = " + str(combo_r2_post))
+    ###print("keys = " + str(combo_r2_post.keys()))
     #exit(0)
 
     # Round 3
     r3_dict, combo_r3_post = round3_consolidate(combo_r2_post) # In round4, watch out for last key possibly being "too close" to prev key
-    print("combo_r3_post   = " + str(combo_r3_post))
+    ###print("combo_r3_post   = " + str(combo_r3_post))
     save_r3_post = combo_r3_post.copy()
 
     # Round 4
     ratio = min_distance_between_two_dots_in_the_same_cell / min_dot_base_diameter
     estimated_distance_between_two_dots_in_the_same_cell = ratio * avgDotDiameter
-    print("avgDotRadius = " + str(avgDotDiameter / 2))
-    print("estimated_distance_between_two_dots_in_the_same_cell = " + str(
-        estimated_distance_between_two_dots_in_the_same_cell))
-    print("estimated half distance between to same-cell dots: " + str(
-        estimated_distance_between_two_dots_in_the_same_cell / 2))
+    ###print("avgDotRadius = " + str(avgDotDiameter / 2))
+    ###print("estimated_distance_between_two_dots_in_the_same_cell = " + str(
+    ###    estimated_distance_between_two_dots_in_the_same_cell))
+    ###print("estimated half distance between to same-cell dots: " + str(
+    ###    estimated_distance_between_two_dots_in_the_same_cell / 2))
     combo_r4_post = round4_consolidate(combo_r3_post,
                                           estimated_distance_between_two_dots_in_the_same_cell)  # was avgDotDiameter, was est without /2
     print("combo original  = " + str(combo_w))
-    print("combo_r1_post   = " + str(combo_r1_post))
-    print("combo_r2_post   = " + str(combo_r2_post))
-    print("save_r3_post    = " + str(save_r3_post))
-    print("combo_r3_post   = " + str(combo_r3_post))
+    ###print("combo_r1_post   = " + str(combo_r1_post))
+    ###print("combo_r2_post   = " + str(combo_r2_post))
+    ###print("save_r3_post    = " + str(save_r3_post))
+    ###print("combo_r3_post   = " + str(combo_r3_post))
     print("combo_r4_post = " + str(combo_r4_post))
-    print(len(combo_r4_post.keys()))
+    ###print(len(combo_r4_post.keys()))
 
 
     return combo_r4_post, avgDotDiameter
@@ -737,7 +686,7 @@ def consolidate_all(combo_w):
 # Remember to calculate avg dot diameter while doing this
 # If avg dot diameter calculation turns out to be not accurate (/not accurate enough), go back to doing the shadow-black calculation
 def round1_consolidate(combo):
-    print("combo = " + str(combo))
+    ###print("combo = " + str(combo))
 
     combo_r1 = combo.copy()
 
@@ -751,12 +700,12 @@ def round1_consolidate(combo):
         #if key == 372:
         #    print("key is 372 done. combo_r1 is now: " + str(combo_r1))
     #exit(0)
-    print("combo___ = " + str(combo))
-    print("combo_r1 = " + str(combo_r1)) #here, 372 has 2 values (good)
+    ###print("combo___ = " + str(combo))
+    ###print("combo_r1 = " + str(combo_r1)) #here, 372 has 2 values (good)
     #exit(0)
 
     diffsAvg = calculate_avg_dot_diameter(combo_r1)
-    print("round1_consolidate's diffsAvg = " + str(diffsAvg))
+    ###print("round1_consolidate's diffsAvg = " + str(diffsAvg))
 
     # REMOVED: Start trying to consolidate further, focusing on consecutive keys with same-length, same-areas
     # TODO: review here
@@ -772,9 +721,9 @@ def track_consecutive_values(combo, combo_r1, key):
     startIndex = 0
     currIndex = 1
 
-    if key == 372:
-        print("key is 372")
-        print("values: " + str(values))
+    ###if key == 372:
+        ###print("key is 372")
+        ###print("values: " + str(values))
         #exit(0)
 
     while currIndex < len(values):
@@ -786,7 +735,7 @@ def track_consecutive_values(combo, combo_r1, key):
             consecutiveValuesSum += currVal
             numConsecutiveValues += 1
         else:
-            print("jump. currVal = " + str(currVal))
+            ###print("jump. currVal = " + str(currVal))
 
             avgVal = consecutiveValuesSum / numConsecutiveValues
             #print("avgVal = " + str(avgVal))
@@ -795,7 +744,7 @@ def track_consecutive_values(combo, combo_r1, key):
             numConsecutiveValues = 1
 
         if currIndex + 1 == len(values):
-            print("[end] jump. currVal = " + str(currVal))
+            ###print("[end] jump. currVal = " + str(currVal))
             avgVal = consecutiveValuesSum / numConsecutiveValues
             #print("avgVal = " + str(avgVal))
             combo_r1[key].append(avgVal)
@@ -923,25 +872,25 @@ def findWhite(filename, img2, pixels2, avg):
 
             sum += curr_pixel_sum
     avg = sum / (img2.size[0] * img2.size[1])
-    print("avg = " + str(avg))
+    ###print("avg = " + str(avg))
     return img2
 
 
 def reassembleThePicture(original_image, filename, dir_out, d, grid):
 
     # Create new image
-    print("\n\noriginal_image.mode = " + str(original_image.mode))
+    ###print("\n\noriginal_image.mode = " + str(original_image.mode))
     desired_ext = ".png"
-    print("reassemble the picture!")
+    ###print("reassemble the picture!")
     name, ext = os.path.splitext(filename)
     w, h = original_image.size
     new_image = Image.new("RGBA", (w, h), ) # THIS WORKS FOR basic embossed (rgb) #RGB or RGBA?
-    print("new_image.mode = " + str(new_image.mode)) #RGB
+    ###print("new_image.mode = " + str(new_image.mode)) #RGB
 
     # Note: not JPG. Instead, PNG. JPG result is pixelated/fuzzy.
     new_image.save(dir_out + "/" + filename + "_reassembled" + desired_ext)
-    print("h - h % d = " + str(h - h % d))
-    print("w - w % d = " + str(w - w % d))
+    ###print("h - h % d = " + str(h - h % d))
+    ###print("w - w % d = " + str(w - w % d))
 
     #exit(0)
 
@@ -954,9 +903,9 @@ def reassembleThePicture(original_image, filename, dir_out, d, grid):
         print("i = " + str(i) + ", j = " + str(j))
         box = (j, i, j + d, i + d)
         curr_filename = str(name) + "_" + str(i) + "_" + str(j) + desired_ext #".jpg? .png?"
-        print("curr_filename = " + str(curr_filename))
+        ###print("curr_filename = " + str(curr_filename))
         curr_img = Image.open(str(dir_out) + "/" + curr_filename)
-        print("curr_img.mode = " + str(curr_img.mode))
+        ###print("curr_img.mode = " + str(curr_img.mode))
 
         #curr_img.show() # oops
 
@@ -965,17 +914,17 @@ def reassembleThePicture(original_image, filename, dir_out, d, grid):
 
 
     # take care of "leftovers"
-    print("h % d = " + str(h % d))
-    print("w % d = " + str(w % d))
+    ###print("h % d = " + str(h % d))
+    ###print("w % d = " + str(w % d))
     tile_rightmost_start = w - (w % d)
     tile_lowest_start = h - (h % d)
-    print("tile_rightmost_start = " + str(tile_rightmost_start))
+    ###print("tile_rightmost_start = " + str(tile_rightmost_start))
     if h % d != 0:
-        print("HERE, w = " + str(w) + ", h = " + str(h))
+        ###print("HERE, w = " + str(w) + ", h = " + str(h))
         curr_w = 0
         while curr_w < tile_rightmost_start: # prev: curr_w < w
             #print("tile_lowest_start = " + str(tile_lowest_start))
-            print("curr_w = " + str(curr_w) + ", w = " + str(w))
+            ###print("curr_w = " + str(curr_w) + ", w = " + str(w))
             box = (curr_w, tile_lowest_start, curr_w + d, h)
             curr_filename = str(name) + "_" + str(tile_lowest_start) + "_" + str(curr_w) + desired_ext#".jpg", .png?
             curr_img = Image.open(str(dir_out) + "/" + curr_filename)
@@ -994,11 +943,11 @@ def reassembleThePicture(original_image, filename, dir_out, d, grid):
             curr_w += d
     #exit(0)
     if w % d != 0:
-        print("HERE")
+        ###print("HERE")
         curr_h = 0
         while curr_h < h:
-            print("tile_rightmost_start = " + str(tile_rightmost_start))
-            print("curr_h = " + str(curr_h))
+            ###print("tile_rightmost_start = " + str(tile_rightmost_start))
+            ###print("curr_h = " + str(curr_h))
             box = (tile_rightmost_start, curr_h, w, curr_h + d)
             curr_filename = str(name) + "_" + str(curr_h) + "_" + str(tile_rightmost_start) + desired_ext
             curr_img = Image.open(str(dir_out) + "/" + curr_filename)
@@ -1007,7 +956,7 @@ def reassembleThePicture(original_image, filename, dir_out, d, grid):
             #curr_img.show()
             new_image.paste(curr_img, box)
             curr_h += d
-    print("new_image.mode = " + str(new_image.mode))
+    ###print("new_image.mode = " + str(new_image.mode))
     new_image.save(dir_out + "/" + filename + "_reassembled" + desired_ext) # png or jpg?
     #new_image.show()
     # example: Embossed_Braille_114_38.jpg
@@ -1028,9 +977,9 @@ def findAvgRGB(filename, img2, pixels2):
             if curr_pixel_sum < low:
                 low = curr_pixel_sum
     avg = sum / (img2.size[0] * img2.size[1])
-    print("avg = " + str(avg))
-    print("low = " + str(low))
-    print("high= " + str(high))
+    ###print("avg = " + str(avg))
+    ###print("low = " + str(low))
+    ###print("high= " + str(high))
     img2 = findWhite(filename, img2, pixels2, avg)
     #img2.show() #pixeltion seems okay here
     return avg, img2
@@ -1044,9 +993,9 @@ def tile(filename, dir_in, dir_out, d):
     w, h = img.size
     #print("---3 REACHED---")
 
-    print("image size = " + str(img.size))
-    print("w = " + str(w))
-    print("h = " + str(h))
+    ###print("image size = " + str(img.size))
+    ###print("w = " + str(w))
+    ###print("h = " + str(h))
     pixel_values = list(img.getdata())
     pixel_sums = []
     for pixel in pixel_values:
@@ -1055,248 +1004,21 @@ def tile(filename, dir_in, dir_out, d):
     picture_sum = 0
     for pixel_sum in pixel_sums:
         picture_sum += pixel_sum
-    print("picture_sum = " + str(picture_sum))
+    ###print("picture_sum = " + str(picture_sum))
     avg = picture_sum / len(pixel_values)
-    print("avg = " + str(avg))
+    ###print("avg = " + str(avg))
 
     img2 = img.copy()
 
     pixels2 = img2.load()  # create the pixel map
     avgRGB_clean, img2 = findAvgRGB(filename, img2, pixels2)
-    print("avgRGB_clean = " + str(avgRGB_clean))
-    ###avgJump = findAvgJump(peaks)
-    ###peaks = removeMiniJumps(peaks, avgJump) # re-add later
-    print("avg_dot_base_diameter = " + str(avg_dot_base_diameter))
+    ###print("avgRGB_clean = " + str(avgRGB_clean))
+    ######avgJump = findAvgJump(peaks)
+    ######peaks = removeMiniJumps(peaks, avgJump) # re-add later
+    ###print("avg_dot_base_diameter = " + str(avg_dot_base_diameter))
     #img2.show() #pixelation seems okay by here
     return img2
-def searchBlack(black, dictionary):
-    print("searchBlack")
 
-    print("len of black: " + str(len(black)))
-    print("len of dict:  " + str(len(dictionary.values())))
-
-    sum = 0
-    for key in dictionary.keys():
-        sum += len(dictionary[key])
-
-    print("num keys = " + str(len(dictionary.keys())))
-    print("sum = " + str(sum))
-
-    for key in dictionary.keys():
-        values = dictionary[key]
-        for value in values:
-            if [key, value] in black:
-                black.remove([key, value])
-                #print("REMOVING!")
-                #exit(0)
-
-    print("updated black len: " + str(len(black))) # why are there 733 remaining??
-    print(dictionary)
-
-def identifyRow(peaks, avgDotDiameter, img2, w, h, pixels2):
-    print()
-    border_top_middle = h / 3
-    border_middle_bottom = 2 * h / 3
-    border_middleground1 = (border_top_middle + border_middle_bottom) / 2
-    border_middleground2 = (border_middle_bottom + h) / 2
-    print("border_top_middle    = " + str(border_top_middle))
-    print("border_middle_bottom = " + str(border_middle_bottom))
-    print("border_middleground1    = " + str(border_middleground1))
-    print("border_middleground2    = " + str(border_middleground2))
-
-
-
-    borders = [border_top_middle, border_middle_bottom]
-    middlegrounds = [border_middleground1, border_middleground2]
-    for i in range(img2.size[0]):
-        for border in borders:
-            pixels2[i, border] = (255, 255, 0) # yellow
-        for middleground in middlegrounds:
-            pixels2[i, middleground] = (255, 128, 0) # orange
-
-    # if 1 peak has > 3 entries, that's a problem...(fix later)
-    for peak in peaks:
-        for height in peak[1]:
-            dot = [peak[0], height]
-            print("peak = " + str(peak))
-            if dot[1] < int(middlegrounds[0]):
-                print("1 or 4")
-            elif dot[1] < int(middlegrounds[1]):
-                print("2 or 5")
-            else:
-                print("3 or 6")
-
-    #img2.show()
-
-def findAdjacentDuplicates(peaks, img2, pixels2):
-    index = 0
-    while index < len(peaks) - 1:
-        print(peaks[index])
-        curr_peak = peaks[index]
-        next_peak = peaks[index + 1]
-
-        curr_key = curr_peak[0]
-        next_key = curr_key[0]
-
-        curr_values = curr_peak[1]
-        next_values = next_peak[1]
-
-        # for each overlap value, remove the lower one
-        for next_value in next_values:
-            if next_value in curr_values: # overlap!
-                curr_values.remove(next_value)
-                pixels2[curr_key, next_value] = (255, 255, 255) # white
-                print("OVERLAP!")
-
-        curr_peak = [curr_key, curr_values]
-        peaks[index] = curr_peak
-
-def findAvgDotDiameter(peaks):
-    index = 0
-    sum = 0 # per dot
-    avg = 0
-    numDots = 0
-    diameters = [] #[index, diameter]
-
-    while index < len(peaks):
-        print("peaks[index] = " + str(peaks[index]))
-        print("index = " + str(index))
-        curr_peak = peaks[index]
-        key = curr_peak[0]
-        values = curr_peak[1]
-        valueIndex = 0
-        start = values[0]
-        no_jump_sum = 0
-        no_jump_count = 0
-        no_jump_avg = 0
-        no_jump_avgValues = []
-        while valueIndex < len(values):
-            curr_value = values[valueIndex]
-            print("===> " + str(curr_value) + "( no_jump_sum = " + str(no_jump_sum) + ")")
-            no_jump_sum += curr_value
-            no_jump_count += 1
-
-            if valueIndex > 0 and valueIndex + 1 < len(values) and curr_value != (values[valueIndex - 1] + 1):
-                end = curr_value
-                diameter = end - start
-                print("diameter = " + str(diameter))
-                diameters.append([valueIndex, diameter])
-                sum += diameter
-                no_jump_sum -= curr_value
-                no_jump_count -= 1
-                print("no_jump_sum = " + str(no_jump_sum))
-                print("no_jump_count = " + str(no_jump_count))
-
-                no_jump_avg = int(no_jump_sum / no_jump_count)
-                print("no_jump_avg = " + str(no_jump_avg))
-                no_jump_avgValues.append(no_jump_avg)
-
-                print("We found a jump!")
-                numDots += 1
-                start = values[valueIndex + 1]
-                no_jump_sum = curr_value
-                no_jump_count = 1
-
-                #sumJump += curr_value - values[valueIndex - 1]
-            if valueIndex + 1 == len(values): # No next dot, so no jump, but still a dot
-                end = curr_value
-                diameter = end - start
-                print("-diameter = " + str(diameter))
-                sum += diameter
-                numDots += 1
-                print("-no_jump_sum = " + str(no_jump_sum))
-                print("-no_jump_count = " + str(no_jump_count))
-
-                no_jump_avg = int(no_jump_sum / no_jump_count)
-                print("-no_jump_avg = " + str(no_jump_avg))
-                no_jump_avgValues.append(no_jump_avg)
-                no_jump_sum = 0
-            valueIndex += 1
-
-        print(peaks[index])
-        #key_ = curr_peak[0]
-        value_ = no_jump_avgValues
-        peaks[index] = [key, value_]  # EX: maximum of 3 dots
-        #print("(updated) peaks[" + str(index) + "] = " + str(peaks[index]))
-        # peaks[index] =  #fix here
-        index += 1
-
-    print("sum of diameters = " + str(sum))
-    print("num dots = " + str(numDots))
-    avg = sum / numDots
-    print("avg diameter = " + str(avg))
-    print("peaks:")
-    print(peaks)
-    return avg, peaks
-def findAvgJump(peaks):
-
-    index = 0
-    sumJump = 0
-    numJumps = 0
-    while index < len(peaks):
-        print(peaks[index])
-        curr_peak = peaks[index]
-        key = curr_peak[0]
-        values = curr_peak[1]
-        valueIndex = 0
-        while valueIndex < len(values):
-            curr_value = values[valueIndex]
-            print("===> " + str(curr_value))
-            if valueIndex > 0 and curr_value != (values[valueIndex - 1] + 1):
-                print("We found a jump!")
-                numJumps += 1
-                sumJump += curr_value - values[valueIndex - 1]
-            valueIndex += 1
-
-        index += 1
-    print("numJumps = " + str(numJumps))
-    print("sumJump  = " + str(sumJump))
-    avgJump = sumJump / numJumps
-    print("avgJump = " + str(avgJump))
-    return avgJump
-
-# Identify peak of bell curve.
-def findPeak(dictionary):
-    print("dictionary = " + str(dictionary)) # 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47
-    numKeys = len(dictionary.keys())
-    keys = list(dictionary.keys())
-    values = list(dictionary.values())
-    index = 0
-    peaksFound = 0
-    peaks = []
-    while index < len(keys):
-        curr_key = keys[index]
-        print("curr_key = " + str(curr_key))
-        curr_values = values[index]
-        print("curr_values = " + str(curr_values))
-        key_values = dictionary.get(curr_key)
-        print("key_values  = " + str(key_values))
-        #print("index = " + str(index) + ". Curr key =  " + str(curr_key))
-        if index > 0 and index < (numKeys - 1): # is it okay to put both bounds here? # current key is not the first or the last key
-            # compare number of values: key vs (key -1)
-            if len(curr_values) > len(values[index-1]) and len(curr_values) >= len(values[index+1]):
-                # current is peak or "low peak"
-                print("PEAK! found at key = " + str(curr_key))
-                peaksFound += 1
-                peaks.append([curr_key, curr_values])                       #### FIND
-
-
-                # get the surrounding ones just in case
-                # upper
-                surroundings_index = index
-                while surroundings_index < (numKeys - 1) and surroundings_index < (index + 5):
-                    peaks.append([keys[surroundings_index], values[surroundings_index]])
-                    surroundings_index += 1
-                    print("surroundings! key " + str(surroundings_index) + " found from key = " + str(curr_key))
-                # lower
-                surroundings_index = index
-                while surroundings_index > 0 and surroundings_index > (index - 5):
-                    peaks.append([keys[surroundings_index], values[surroundings_index]])
-                    surroundings_index -= 1
-                    print("surroundings! key " + str(surroundings_index) + " found from key = " + str(curr_key))
-        index += 1
-    print("peaksFound = " + str(peaksFound))
-    return peaks
 
 # Defining main function
 # TODO: accept file path, use that file
