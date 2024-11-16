@@ -23,7 +23,7 @@ import requests
 #def open_abcbraille(driver):
 
 def cellsToText(cells):
-    #print("cellsToText. ")
+
     output_text = ""
     # Set up the WebDriver (this example uses Chrome)
     driver = webdriver.Chrome()

@@ -1,9 +1,6 @@
 """
     Given a single-braille-line testcase,
     store the cell makeup of each cell in the list "cells".
-
-
-    Update: replaced 0 cell with [] cell
 """
 import math
 import sys
@@ -15,6 +12,23 @@ import sys
 #avg_dot_diameter = -1
 #avg_distance_between_adjacent_dots = -1
 
+# Added: 5to10cells testcase with updated coord results
+testcase0 = {
+    21: [11.5, 24.5, 44.0],
+    33: [24.5],
+    62: [17.0],
+    73: [24.5],
+    120: [12.5, 25.0],
+    161: [11.5],
+    181: [28.0],
+    225: [11.0, 22.5, 36.5],
+    266: [21.0],
+    286: [12.5],
+    306: [8.5, 21.0],
+    321: [7.5, 20.5],
+    348: [7.0, 20.0],
+    367: [24.0]
+}
 
 # 5to10cells testcase
 testcase1 = {
@@ -74,11 +88,9 @@ testcase_sheet_title = {
 
 cols = dict()
 def print_testcase(testcase):
-    print("\n-----------------") # added
     for key in testcase:
         values = testcase[key]
         print(str(key) + ": " + str(values))
-    print("\n-----------------") # added
 
 #def print_globals():
     #print("-------Globals:---------")
@@ -88,7 +100,13 @@ def print_testcase(testcase):
     #print("\tavg_dot_diamter = " + str(avg_dot_diameter))
     #print("\tavg_distance_between_adjacent_dots = " + str(avg_distance_between_adjacent_dots))
 
+
 def column(testcase, key, dividers):
+    """
+    Allows col1 values. If col2, the value will get updated later on.
+    - len 1 or 2: use height to determine number
+    - len 3: 1,2,3
+    """
     values = testcase[key]
     print(str(key) + ": " + str(values))
 
@@ -118,89 +136,57 @@ def column(testcase, key, dividers):
 # Iterate through cols. If latest num > curr num: that's a new cell.
 # If diff > 14, they're not in the same cell.
 cells = [] # No keys
-def getCellsFromCols(avg_distance_between_adjacent_dots):
 
-    """
-    The following measurements help determine the location id of a dot in a cell:
-        1. shortest:    same-cell col1 to col2 distance
-        2. medium:      adjacent-cell col2 to col1 distance
-        3. mediumLarge: adjacent-cell col1 to col1 or col2 to col2
-        4. Large:       col2, jump empty cell, col1
-    """
-    print("getCellsFromCols")
-    print("cells = " + str(cells))
-    print("cols  = " + str(cols))
+def getCellsFromCols(cols, avg_distance_between_adjacent_dots):
+
+    # Iterate through cols. Find "cells" and append them to cells list.
+    # Large gap means [], a space.
+    # Small gap means same cell.
+    # Between those means adjacent/different cells.
+
+    col1to2_buffer = avg_distance_between_adjacent_dots * float(2.5 / 1.6)  # ~21, 22. was float(20/14)
+    gap_start = (avg_distance_between_adjacent_dots * 7.6) / 2.5    # alternative: 6.1 instead of 7.6
+    ###print("gap_start = " + str(gap_start))
+    print(cols)
     keys_list = list(cols.keys())
     start_key = keys_list[0]
-
     #cells.append(cols[start_key])
-    cells_index = 0
-    index = 1
-    while index < len(keys_list): # double check this line # 364
+    index = 0
+    while index < len(keys_list) - 1:
         curr_key = keys_list[index]
-        prev_key = keys_list[index-1]
-        print(str(curr_key) + ": " + str(cols[curr_key]))
-        diff = abs(curr_key - prev_key)
-        print("diff = " + str(diff))
-        print("avg_distance_between_adjacent_dots = " + str(avg_distance_between_adjacent_dots))
+        next_key = keys_list[index + 1]
+        diff = abs(next_key - curr_key)
+        print()
 
-        gap_between_adjacent_cells = avg_distance_between_adjacent_dots * float(26/14)
-        empty_col_plus_gap_between_adjacent_cells = avg_distance_between_adjacent_dots + gap_between_adjacent_cells
-
-        col1to2_buffer = math.ceil(avg_distance_between_adjacent_dots * float(20 / 14))
-        gap_buffer = math.ceil(gap_between_adjacent_cells * float(30/26))
-        empty_col_plus_gap_buffer = math.ceil(empty_col_plus_gap_between_adjacent_cells * float(45/40))
-
-        print("col1 to 2 buffer = " + str(col1to2_buffer))
-        print("gap_between_adjacent_cells = " + str(gap_between_adjacent_cells))
-        print("gap_buffer = " + str(gap_buffer))
-        print("empty_col_plus_gap_between_adjacent_cells = " + str(empty_col_plus_gap_between_adjacent_cells))
-        print("empty_col_plus_gap_buffer = " + str(empty_col_plus_gap_buffer))
-        if diff < col1to2_buffer: #buffer. was 20: # 14/15
-            join = cols[prev_key] + cols[curr_key] # join two lists
+        #print("[diff = " + str(diff) + "] curr = " + str(curr_key) + ", next = " + str(next_key))
+        #print("curr values = " + str(cols[curr_key]))
+        #print("next values = " + str(cols[next_key]))
+        
+        if diff >= gap_start:
+            #print("SPACE")
+            cells.append([])
+        elif diff < col1to2_buffer:
+            #print("SAME CELL")
+            join = cols[curr_key] + cols[next_key]  # join two lists
+            #print("join = " + str(join) + " | cells = " + str(cells))
             cells.append(join)
-            cells_index += 1
-        elif diff < gap_buffer: #30: # 26. Using buffer of 30.
-            print("looks like col 2 to col 1")
-            cells_index += 1
 
-        elif diff < empty_col_plus_gap_buffer: #45: # 40 for gap and an empty col
+            # Check for space that might get missed when you "jump"
+            if (index + 1) < len(keys_list) - 1:
+                next_next_key = keys_list[index + 2]
+                diff2 = abs(next_key - next_next_key)
+                if diff2 >= gap_start:
+                    cells.append([])
 
-            # this is based on curr and prev. What about next?
-            # EX: could have col2 --> col2 vs col1 --> col1
-            # if col1-->col1: this fails for testcase1 but succeeds for testcase2. TC1 is midline. TC2 is start of line.
-            print("medium diff!")
-            if index == 1: #???
-                cells.append(cols[curr_key]) # include this?
-                cells_index += 1 # include this?
-
+            # "Jump"
+            index += 1
         else:
-            print("large diff (space?)")
-            empty_list = []
-            cells.append(empty_list) # prev: cells.append(0)
-            cells_index += 1
-            cells.append(cols[curr_key]) #?
-            cells_index += 1
-        # Note: need to be able to deal with multiple spaces in a row, leaving from col1 or col2, jumping to col1 or col2
+            #print("DIFF CELLS")
+            cells.append(cols[curr_key])
+            #
 
-        #else:
-        #    cells_index += 1
+        #print("cells = " + str(cells))
         index += 1
-        print("cells = " + str(cells) + "\n")
-
-    return cells  #added 10Nov2024
-
-        #if index >= 14: #temporary
-        #    exit(0)
-
-    #for key in cols:
-    #    print(str(key) + ": " + str(cols[key]))
-        # if last val of curr >= first val of next: new cell
-        # if last val of curr < first val of next: look at diff. If diff is large, new cell. If small, same cell.
-
-    #for key in cols:
-    #    values = key.values()
-    #    print(str(key) + ": " + str(values))
 
 def becomeCol2(key): # does this preserve the changes?
     """
@@ -208,8 +194,8 @@ def becomeCol2(key): # does this preserve the changes?
     Valid col2 values are 4, 5, and 6.
     A col1 value + 3 is the corresponding col2 value. EX: 1 --> 4.
     """
-    print("key = " + str(key))
-    print("values = " + str(cols[key]))
+    #print("key = " + str(key))
+    #print("values = " + str(cols[key]))
     new_values = []  # used in order to preserve changes made and transfer them back to cols
     for value in cols[key]:
         new_values.append(value + 3)
@@ -230,29 +216,44 @@ def get_single_dot_123456(testcase, key, avg_distance_between_adjacent_dots): # 
     keys_list = list(cols.keys())
     print(keys_list)
 
-    col1to2_buffer = avg_distance_between_adjacent_dots * float(20 / 14)
-    index = -1 # default
+    col1to2_buffer = avg_distance_between_adjacent_dots * float(2.5 / 1.6)  # was float(20/14)
+    ###print("col1to2_buffer = " + str(col1to2_buffer))
+    index = -1  # default
+
+    # Get index from key
     if key in keys_list:
         index = keys_list.index(key)
 
+    # If last index, do not call becomeCol2. It should already be updated. Current method updates NEXT index.
     if index == len(keys_list) - 1:  # last one
-        diff = abs(keys_list[index] - keys_list[index - 1])
-        if diff < col1to2_buffer: #20: # / around 14 # note: fix this
-            becomeCol2(keys_list[index])
-        return # for now
+        return False
+    else:
+        # Not last index. If "too close" update NEXT index's value.
 
-    # get distance from curr col to next col
-    diff = abs(keys_list[index] - keys_list[index + 1])
-    if diff <= avg_distance_between_adjacent_dots:  #14:
-    #if diff == 14: # == or <=?
-        # index is col1, index + 1 is col2
-        becomeCol2(keys_list[index+1])
-    print("diff = " + str(diff) + "\n")
+        # get distance from curr col to next col
+        diff = abs(keys_list[index] - keys_list[index + 1])
+
+        # same cell ("too close")
+        if diff <= col1to2_buffer: # try this
+            # index is col1, index + 1 is col2
+            ###print("[key = " + str(key) + "] diff " + str(diff) + " < col1to2_buffer " + str(col1to2_buffer) + " ==> SAME CELL!")
+            becomeCol2(keys_list[index+1])
+            return True  # same cell
+        else:
+            return False  # not same cell
+        #print("avg_distance_between_adjacent_dots = " + str(avg_distance_between_adjacent_dots))
+        #print("diff = " + str(diff) + "\n")
+        #exit(0)
 
 # For each dot in the given testcase, get the location id (a number [1,6]) within a cell.
 def get_all_dots_123456(testcase, avg_distance_between_adjacent_dots): #added avg_distance...
+
+    skipNext = False
     for key in testcase:
-        get_single_dot_123456(testcase, key, avg_distance_between_adjacent_dots)
+        if(skipNext):
+            skipNext = False
+        else:
+            skipNext = get_single_dot_123456(testcase, key, avg_distance_between_adjacent_dots)
 
 # For a dot of height "height", determines which row of a cell it falls into.
 # Returns 1, 2, or 3.
@@ -272,36 +273,22 @@ def get_dividers(img_h, testcase, avg_dot_diameter, avg_distance_between_adjacen
     # look for dot highest in the picture (lowest value)
     uppermost = get_uppermost_h(testcase)
     bottommost = get_bottommost_h(testcase)
-    avg = get_avg_h(testcase)
-    #print("uppermost  = " + str(uppermost))
-    #print("bottommost = " + str(bottommost))
-    #print("avg_h      = " + str(avg))
+    ###print("uppermost  = " + str(uppermost))
+    ###print("bottommost = " + str(bottommost))
 
-    middle_line = (uppermost + avg_distance_between_adjacent_dots)
-    top_middle_divider = (uppermost + middle_line) / 2
-    middle_bottom_divider = (middle_line + bottommost) / 2
-    #print("top_middle_divider    = " + str(top_middle_divider))
-    #print("middle_bottom divider = " + str(middle_bottom_divider))
+    #middle_line = (uppermost + avg_distance_between_adjacent_dots)
+    # top_middle_divider = (uppermost + middle_line) / 2
+    # middle_bottom_divider = (middle_line + bottommost) / 2
+    middle_line = abs(uppermost - bottommost) /2 #+ avg_distance_between_adjacent_dots)
 
+    top_middle_divider = (uppermost + middle_line - avg_dot_diameter/2)
+    middle_bottom_divider = (bottommost - avg_dot_diameter/2)
+    ###print("middle_line           = " + str(middle_line))
+    ###print("top_middle_divider    = " + str(top_middle_divider))
+    ###print("middle_bottom divider = " + str(middle_bottom_divider))
     return [top_middle_divider, middle_bottom_divider]
 
-# Given a testcase, return the average height of a dot.
-# Note: revisit this calculation.
-def get_avg_h(testcase):
-    """
-    The keys in a testcase represent widths.
-    The values in a testcase represent heights.
-    """
-    sum = 0
-    numVals = 0
-    for key in testcase:
-        values = testcase[key]
-        for value in values:
-            sum += value
-            numVals += 1
-    return sum / len(testcase.keys())
-    #print("avg = " + str(sum/numVals))
-    #return sum / numVals
+
 def get_uppermost_h(testcase):
     """
     The top of the page starts at height 0.
@@ -334,6 +321,33 @@ def columns(testcase, dividers):
         column(testcase, key, dividers)
         #exit(0)
 
+# testcase_none: ERROR - not working
+def testcase_none(img, coords):
+
+    width, height = img.size
+    print("testcase_none")
+    print("(coordsToCells) coords = " + str(coords))
+    avg_dot_diameter = 7
+    avg_distance_between_adjacent_dots = 12
+    return do_testcase(height, coords, avg_dot_diameter, avg_distance_between_adjacent_dots) # added "return"
+
+
+def testcase_zero(coords):
+    """
+    Tests Embossed_Braille_subsection_5to10cells.png
+    Result: cells = [[1, 2, 3, 5], [1, 5], [], [1, 2], [1, 5], [], [1, 2, 3], [2, 4], [1, 2, 4, 5], [1, 2, 5]]
+    """
+    testcase = 0
+    img_h = 62
+    img_w = 385
+    avg_dot_diameter = 9
+    avg_distance_between_adjacent_dots = 14
+
+    do_testcase(img_h, coords, avg_dot_diameter, avg_distance_between_adjacent_dots)
+    return cells
+    #ranges = getRowRanges(testcase0, avg_dot_diameter)
+    #print("ranges = " + str(ranges))
+
 def testcase_one():
     """
     Tests Embossed_Braille_subsection_5to10cells.png
@@ -346,7 +360,10 @@ def testcase_one():
     img_w = 385
     avg_dot_diameter = 10
     avg_distance_between_adjacent_dots = 14
-    return do_testcase(img_h, testcase1, avg_dot_diameter, avg_distance_between_adjacent_dots) # added "return"
+
+    do_testcase(img_h, testcase1, avg_dot_diameter, avg_distance_between_adjacent_dots)
+    ranges = getRowRanges(testcase1, 10)
+    print("ranges = " + str(ranges))
 
 def testcase_two():
     """
@@ -360,55 +377,14 @@ def testcase_two():
     avg_distance_between_adjacent_dots = 80  # guess
     do_testcase(img_h, testcase2, avg_dot_diameter, avg_distance_between_adjacent_dots)
 
-def testcase_sheet_title_testcase0():
-    #⠠⠞⠑⠌⠉⠁⠎⠑⠎
-    # Testcases
 
-    testcase = 0
-    img_h = 48
-    img_w = 728
-    avg_dot_diameter = 11.2  # guess/estimate
-    avg_distance_between_adjacent_dots = 11.2 # guess/estimate (???)
-    do_testcase(img_h, testcase_sheet_title, avg_dot_diameter, avg_distance_between_adjacent_dots)
-    # Multiple consecutive spaces: 10 spaces, "Testcases", 11 spaces
-    # No spaces within the text itself
-    #print(4)
-
-def testcase_sheet_ex1():
-    #⠠⠇⠕⠕⠅⠎⠀⠇⠀⠗⠁⠔⠲⠲⠲⠀⠠⠠⠗⠊⠣⠞⠦
-    # Looks like rain... RIGHT?
-
-    # Starts at col2, not col1
-    #
-    # No space in between:
-    #   - Has col1-->col2: 'o' in 'looks'
-    #   - Has col2-->col1: 'oo' in 'looks'
-    #   - Has col1-->col1: 'ks' in 'looks'
-    #   - Has col2-->col2: two-cell all caps indicator before "RIGHT?"
-    #
-    # Space in between:
-    #   - Missing col1-->col2
-    #   - Has col2-->col1: 's' to 'l' in 'looks l' (looks like)
-    #   - Has col1-->col1: 'l' (like) to 'r' in 'rain'
-    #   - Missing col2-->col2
-    #
-    # Missing multiple spaces in a row (treat as one space? Or multiple)
-
-    print(4)
-
-def testcase_sheet_ex2():
-    #
-    # 3x: col1 --> col2 with space in between (+ varying number of spaces)
-    # 3x: col2 --> col1 with space in between
-    # 3x: col1 --> col1 with space in between
-    # 3x: col2 --> col2 with space in between
-    print(4)
 def do_testcase(img_h, testcase, avg_dot_diameter, avg_distance_between_adjacent_dots):
     print("----------")
     print_testcase(testcase)
 
     print("----------")
     dividers = get_dividers(img_h, testcase1, avg_dot_diameter, avg_distance_between_adjacent_dots)
+    print("dividers = " + str(dividers))
     columns(testcase, dividers)
 
     print("----------")
@@ -420,17 +396,21 @@ def do_testcase(img_h, testcase, avg_dot_diameter, avg_distance_between_adjacent
     # print_testcase(cols)
 
     print("----------")
-    #print("cells (before entering getCellsFromCols")
-
-    cells = getCellsFromCols(avg_distance_between_adjacent_dots) # added "cells = "
-    #print(cells)
-    return cells # added return cells
+    print("avg_distance_between_adjacent_dots = " + str(avg_distance_between_adjacent_dots))
+    getCellsFromCols(cols, avg_distance_between_adjacent_dots)
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    testcase_one()
+    print("HELLO")
+    #testcase_zero(coords)
+    #testcase_one()
     #testcase_two()
-    #testcase_sheet_title_testcase0()
+
+# Needs work:
+# get_dividers -- messy
+# get_single_dot_123456 -- is still hardcoded
+# getCellsFromCols -- is still hardcoded
+# column -- works but is unclear with naming
 
 
 

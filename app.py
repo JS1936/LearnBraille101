@@ -156,6 +156,7 @@ def upload_file():
 
         # Try to get most recent submission 
         image = get_most_recent_blob_photo()
+        
         #result = subprocess.run(['python', 'py/hello_world.py', local_file_path], capture_output=True, text=True)
         #print("result output: " + result.stdout)
 
@@ -164,13 +165,14 @@ def upload_file():
 
         # Cells for 5to10cells example
         ###from coordsToCells_practice import testcase1 # try this
-        cells = [[1, 2, 3, 5], [1, 5], [], [1, 2], [1, 5], [], [1, 2, 3], [2, 4], [1, 2, 4, 5], [1, 2, 5]]
+        #cells = [[1, 2, 3, 5], [1, 5], [], [1, 2], [1, 5], [], [1, 2, 3], [2, 4], [1, 2, 4, 5], [1, 2, 5]]
         
         # Convert the list to a JSON string
-        print("cells = " + str(cells))
-        cells_json = json.dumps(cells) 
-        print("cells_json = " + str(cells_json))
-        result = subprocess.run(['python', 'py/hello_world.py', cells_json], capture_output=True, text=True)
+        #print("cells = " + str(cells))
+        #cells_json = json.dumps(cells) 
+        #print("cells_json = " + str(cells_json))
+        #result = subprocess.run(['python', 'py/hello_world.py', image], capture_output=True, text=True)
+        result = subprocess.run(['python', 'py/hello_world.py', local_file_path], capture_output=True, text=True)
         
         #also print to console...
         print("result output: " + result.stdout)
