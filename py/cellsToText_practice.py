@@ -33,14 +33,17 @@ def cellsToText(cells):
     output_text = ""
     # Set up the WebDriver (this example uses Chrome)
 
+
     #driver = webdriver.Chrome()
 
     
     #Try this:
     #service = Service(ChromeDriverManager(version="115.0.5790.170").install())
     
+    #OK LOCALLY:
     service = Service(ChromeDriverManager().install())
     driver = webdriver.Chrome(service=service)
+    
     #driver = webdriver.Chrome(ChromeDriverManager().install())
     #service = Service()
     #print("--------| MADE A SERVICE |---------")    # MADE IT HERE
@@ -87,6 +90,7 @@ def cellsToText(cells):
 
     except:
         print("FAILED")
+        driver.quit()
         exit(1)
 
     #EXAMPLE:
