@@ -1,3 +1,4 @@
 Notes.txt
 
 29Nov - try commit/push to GitHub, deploy to Azure with only adding this comment because previous push failed.
+29Nov - temporarily updates to GitHub pro. Try again.
