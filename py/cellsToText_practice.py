@@ -31,7 +31,6 @@ from selenium.webdriver.chrome.service import Service
 def cellsToText(cells):
 
     output_text = ""
-    # Set up the WebDriver (this example uses Chrome)
 
 
     #driver = webdriver.Chrome()
@@ -42,19 +41,15 @@ def cellsToText(cells):
     
     #OK LOCALLY:
     service = Service(ChromeDriverManager().install())
+
+    #print("--------------------")
+    #print("Service is connectable? ==> " + str(service.is_connectable()))
+    #exit(0)
+
+    ###########
+    #FAILS remotely:
     driver = webdriver.Chrome(service=service)
-    
-    #driver = webdriver.Chrome(ChromeDriverManager().install())
-    #service = Service()
-    #print("--------| MADE A SERVICE |---------")    # MADE IT HERE
-    #options = webdriver.ChromeOptions()
-    #print("--------| OPTIONS |---------")           # MADE IT HERE
-    #driver = webdriver.Chrome(service=service, options=options)
-    #print("--------| DRIVER |---------")            # FAILED TO MAKE IT HERE
-    #driver = webdriver.Chrome(ChromeDriverManager().install())
-    #driver = webdriver.Chrome(ChromeDriverManager().install()) # Failed
-    #driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager(version='114.0.5735.90').install()))
-    #driver = webdriver.Chrome(ChromeDriverManager(version='114.0.5735.90').install())
+
     try:
         driver.get("https://abcbraille.com/braille")  # Open the website
         time.sleep(2) # Let the page load
@@ -118,3 +113,19 @@ def cellsToText(cells):
 
     # Return output so that it can later be displayed to user
     return output_text
+
+
+
+    ### TRIED....
+        
+    #driver = webdriver.Chrome(ChromeDriverManager().install())
+    #service = Service()
+    #print("--------| MADE A SERVICE |---------")    # MADE IT HERE
+    #options = webdriver.ChromeOptions()
+    #print("--------| OPTIONS |---------")           # MADE IT HERE
+    #driver = webdriver.Chrome(service=service, options=options)
+    #print("--------| DRIVER |---------")            # FAILED TO MAKE IT HERE
+    #driver = webdriver.Chrome(ChromeDriverManager().install())
+    #driver = webdriver.Chrome(ChromeDriverManager().install()) # Failed
+    #driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager(version='114.0.5735.90').install()))
+    #driver = webdriver.Chrome(ChromeDriverManager(version='114.0.5735.90').install())
