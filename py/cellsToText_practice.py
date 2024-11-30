@@ -28,23 +28,19 @@ from selenium.webdriver.chrome.service import Service
 # Current mac laptop (Nov 2024) google chrome version is the following:
 # Version 130.0.6723.119 (Official Build) (arm64)
 
+
+#remote webdriver
+def cellsToText2(cells):
+    print(4)
+
+
+# webdriver
 def cellsToText(cells):
 
     output_text = ""
 
-
-    #driver = webdriver.Chrome()
-
-    
-    #Try this:
-    #service = Service(ChromeDriverManager(version="115.0.5790.170").install())
-    
     #OK LOCALLY:
     service = Service(ChromeDriverManager().install())
-
-    #print("--------------------")
-    #print("Service is connectable? ==> " + str(service.is_connectable()))
-    #exit(0)
 
     ###########
     #FAILS remotely:
