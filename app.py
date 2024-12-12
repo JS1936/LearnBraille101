@@ -104,20 +104,11 @@ def presentation():
     return send_from_directory('static', 'Presentation.html')   
 
 # 
-# Dummy files: x, y, z
+# Dummy file: x
 #
-@app.route('/x')
-def x():
-    return send_from_directory('static', 'x.html') 
-
-@app.route('/y')
-def y():
-    return send_from_directory('static', 'y.html') 
-
-@app.route('/z')
-def z():
-    return send_from_directory('static', 'z.html') 
-
+# @app.route('/x')
+# def x():
+#     return send_from_directory('static', 'x.html') 
 
 #
 # Dummy function
